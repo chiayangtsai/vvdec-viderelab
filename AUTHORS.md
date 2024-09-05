@@ -11,3 +11,5 @@
 * Matthieu Sauer, ,
 * Florian Eisenreich, , Fraunhofer HHI
 * Philippe de Lagrange, @delagrangep, InterDigital
+ other good people
+ 
