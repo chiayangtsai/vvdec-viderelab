@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\..\source\App\vvdecapp\CmdLineParser.h">
+      <Filter>source\app\vvdecapp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\App\vvdecapp\MD5StreamBuf.h">
+      <Filter>source\app\vvdecapp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\App\vvdecapp\resource.h">
+      <Filter>source\app\vvdecapp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\App\vvdecapp\resource_version.h">
+      <Filter>source\app\vvdecapp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\App\vvdecapp\vvdecHelper.h">
+      <Filter>source\app\vvdecapp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{8b6b6600-5148-4f3a-86f4-aa9e8f614aa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\app">
+      <UniqueIdentifier>{90c76fa8-f3ab-4fae-883f-2cfa138020e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\app\vvdecapp">
+      <UniqueIdentifier>{20311792-a02e-4402-b8ac-343bbbf8ec24}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\App\vvdecapp\vvdecapp.cpp">
+      <Filter>source\app\vvdecapp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\source\App\vvdecapp\vvdecapp.rc">
+      <Filter>source\app\vvdecapp</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

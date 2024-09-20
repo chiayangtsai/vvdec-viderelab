@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{ce28f100-80cf-477f-8082-bb53befcbcce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{d61f94c3-847c-418c-94a1-586e4f9926d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\commonlib">
+      <UniqueIdentifier>{4b474fb5-2047-4a92-ace8-afb505f248b8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\BitStream.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Buffer.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\ChromaFormat.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\CodingStructure.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\ContextModelling.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Contexts.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\dtrace.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\InterpolationFilter.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\InterPrediction.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\IntraPrediction.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\LoopFilter.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\MatrixIntraPrediction.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Mv.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\ParameterSetManager.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\PicListManager.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Picture.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\PicYuvMD5.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Quant.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\RdCost.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Reshape.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Rom.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\RomLFNST.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\RomTr.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\SampleAdaptiveOffset.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\SEI_internal.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Slice.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\StatCounter.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\TrQuant.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\TrQuant_EMT.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\Unit.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\UnitPartitioner.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\UnitTools.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\WeightPrediction.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\BitStream.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Buffer.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\ChromaFormat.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\CodingStructure.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Common.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\CommonDef.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\ContextModelling.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Contexts.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace_buffer.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace_codingstruct.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace_next.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\InterpolationFilter.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\InterPrediction.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\IntraPrediction.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\LoopFilter.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\MatrixIntraPrediction.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\MipData.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\MotionInfo.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Mv.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\NAL.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\ParameterSetManager.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\PicListManager.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Picture.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Quant.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\RdCost.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Reshape.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Rom.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\SampleAdaptiveOffset.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\SEI_internal.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Slice.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\StatCounter.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\TimeProfiler.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\TrQuant.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\TrQuant_EMT.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\TypeDef.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\Unit.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\UnitPartitioner.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\UnitTools.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\CommonLib\WeightPrediction.h">
+      <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

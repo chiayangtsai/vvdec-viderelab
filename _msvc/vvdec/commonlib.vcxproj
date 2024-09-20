@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\BitStream.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Buffer.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\ChromaFormat.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\CodingStructure.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\ContextModelling.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Contexts.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\dtrace.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\InterpolationFilter.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\InterPrediction.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\IntraPrediction.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\LoopFilter.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\MatrixIntraPrediction.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Mv.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\ParameterSetManager.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\PicListManager.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Picture.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\PicYuvMD5.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Quant.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\RdCost.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Reshape.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Rom.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\RomLFNST.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\RomTr.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\SampleAdaptiveOffset.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\SEI_internal.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Slice.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\StatCounter.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\TrQuant.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\TrQuant_EMT.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\Unit.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\UnitPartitioner.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\UnitTools.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\WeightPrediction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\BitStream.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Buffer.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\ChromaFormat.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\CodingStructure.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Common.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\CommonDef.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\ContextModelling.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Contexts.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace_buffer.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace_codingstruct.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\dtrace_next.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\InterpolationFilter.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\InterPrediction.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\IntraPrediction.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\LoopFilter.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\MatrixIntraPrediction.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\MipData.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\MotionInfo.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Mv.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\NAL.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\ParameterSetManager.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\PicListManager.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Picture.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Quant.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\RdCost.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Reshape.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Rom.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\SampleAdaptiveOffset.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\SEI_internal.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Slice.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\StatCounter.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\TimeProfiler.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\TrQuant.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\TrQuant_EMT.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\TypeDef.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\Unit.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\UnitPartitioner.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\UnitTools.h" />
+    <ClInclude Include="..\..\source\Lib\CommonLib\WeightPrediction.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{5594f381-6fc7-48b2-991a-2d99a28a987e}</ProjectGuid>
+    <RootNamespace>commonlib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\bin\msvc$(VisualStudioVersion)\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

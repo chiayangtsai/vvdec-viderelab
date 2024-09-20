@@ -76,8 +76,8 @@ void  WeightPrediction::getWpScaling(const Slice                *pcSlice,
   const bool bBiPred         = (iRefIdx0 >= 0 && iRefIdx1 >= 0);
   const bool bUniPred        = !bBiPred;
 
-  WPScalingParam* wp0org;
-  WPScalingParam* wp1org;
+  WPScalingParam* wp0org{nullptr};
+  WPScalingParam* wp1org{nullptr};
 
   if (bUniPred || wpBiPred)
   {

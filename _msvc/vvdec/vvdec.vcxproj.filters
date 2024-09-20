@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{630f7410-2286-4a5a-8b27-1780be46a4c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{c21ca87e-899d-4541-9435-943fb696e32a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\vvdec">
+      <UniqueIdentifier>{e841e47b-4fed-4bc0-94d3-aa1a83431023}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Lib\vvdec\resource.h">
+      <Filter>source\lib\vvdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\vvdec\resource_version.h">
+      <Filter>source\lib\vvdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\vvdec\vvdecimpl.h">
+      <Filter>source\lib\vvdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\vvdec\wasm_bindings.h">
+      <Filter>source\lib\vvdec</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\source\Lib\vvdec\version.h.in">
+      <Filter>source\lib\vvdec</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Lib\vvdec\vvdec.cpp">
+      <Filter>source\lib\vvdec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\vvdec\vvdecimpl.cpp">
+      <Filter>source\lib\vvdec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\vvdec\wasm_bindings.cpp">
+      <Filter>source\lib\vvdec</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\source\Lib\vvdec\vvdec.rc">
+      <Filter>source\lib\vvdec</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
