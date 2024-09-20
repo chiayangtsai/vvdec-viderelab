@@ -30,6 +30,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\Lib\vvdec\vvdec.cpp" />
     <ClCompile Include="..\..\source\Lib\vvdec\vvdecimpl.cpp" />
+    <ClCompile Include="..\..\source\Lib\vvdec\vvdecimpl_print_structure.cpp" />
     <ClCompile Include="..\..\source\Lib\vvdec\wasm_bindings.cpp" />
   </ItemGroup>
   <ItemGroup>

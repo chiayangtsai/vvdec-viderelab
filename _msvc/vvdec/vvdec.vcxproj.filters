@@ -40,6 +40,9 @@
     <ClCompile Include="..\..\source\Lib\vvdec\wasm_bindings.cpp">
       <Filter>source\lib\vvdec</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Lib\vvdec\vvdecimpl_print_structure.cpp">
+      <Filter>source\lib\vvdec</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\source\Lib\vvdec\vvdec.rc">

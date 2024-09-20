@@ -1061,6 +1061,8 @@ static bool handle_frame( vvdecFrame*   pcFrame,
       printSEI( dec, pcFrame, logStream );
     }
 
+    vvdec_print_pic_structure(std::cout, dec, pcFrame);
+
     if( pcFrame->frameFormat == VVDEC_FF_PROGRESSIVE )
     {
       if( iPrintPicHash >= 11 )

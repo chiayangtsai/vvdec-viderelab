@@ -146,6 +146,7 @@ public:
   void setLoggingCallback( vvdecLoggingCallback callback );
 
   int decode( vvdecAccessUnit& accessUnit, vvdecFrame** ppframe );
+  int printPicStructure(std::ostream& s, const vvdecFrame *frame) const;
 
   int flush( vvdecFrame** ppcFrame );
 
@@ -169,7 +170,7 @@ public:
   static const char* getNalUnitTypeAsString( vvdecNalType t );
   static bool isNalUnitSlice               ( vvdecNalType t );
 
-  std::string                             m_cErrorString;
+  mutable std::string                     m_cErrorString;
   std::string                             m_cAdditionalErrorString;
 
 private:

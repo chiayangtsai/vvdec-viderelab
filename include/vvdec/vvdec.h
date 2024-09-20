@@ -47,6 +47,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <iostream>
 
 #include "vvdec/sei.h"
 
@@ -560,6 +561,8 @@ VVDEC_DECL int vvdec_set_logging_callback(vvdecDecoder*, vvdecLoggingCallback ca
   \pre         The decoder has to be initialized successfully.
 */
 VVDEC_DECL int vvdec_decode( vvdecDecoder *, vvdecAccessUnit *accessUnit, vvdecFrame **frame );
+
+VVDEC_DECL int vvdec_print_pic_structure(std::ostream& s, const vvdecDecoder* dec, const vvdecFrame* frame);
 
 /* vvdec_flush
   This method flushes the decoder.
