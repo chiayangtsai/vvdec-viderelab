@@ -44,6 +44,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #  define DEC_AT_FPS  0 // 0: disabled, positive: use this FPS, -1: read timing info from bitstream (requires timing info in HRD)
 #endif
 
+#include <viderelab/demuxers/yuv_demuxer.hpp>
+#include <viderelab/common/json.hpp>
+
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
@@ -93,6 +96,8 @@ static bool handle_frame( vvdecFrame*   pcFrame,
                           int           iPrintPicHash,
                           unsigned int& uiFrames,
                           unsigned int& uiFramesTmp,
+                          std::optional<viderelab::json::Dict>& frameStructure,
+                          viderelab::YUVDemuxer * const yuv,
                           vvdecLogLevel logLevel,
                           std::ostream* logStream,
                           std::ostream* outStream,
@@ -464,6 +469,8 @@ int main( int argc, char* argv[] )
 
   std::string cBitstreamFile = "";
   std::string cOutputFile    = "";
+  std::string cStructureFile = "";
+  std::string cReferenceFile = "";
   int         iMaxFrames     = -1;
   int         iLoopCount     = 1;
   bool        y4mOutput      = false;
@@ -486,7 +493,7 @@ int main( int argc, char* argv[] )
   int iRet = -1;
   try {
     vvdecoderapp::CmdLineParser cmdLineParser;
-    iRet = cmdLineParser.parse_command_line( argc, argv, params, cBitstreamFile, cOutputFile, iMaxFrames, iLoopCount, cExpectedYuvMD5, y4mOutput, externAllocator, sTracingFile, sTracingRule, iPrintPicHash );
+    iRet = cmdLineParser.parse_command_line( argc, argv, params, cBitstreamFile, cOutputFile, cStructureFile, cReferenceFile, iMaxFrames, iLoopCount, cExpectedYuvMD5, y4mOutput, externAllocator, sTracingFile, sTracingRule, iPrintPicHash );
   }
   catch( std::exception& )
   {
@@ -530,7 +537,29 @@ int main( int argc, char* argv[] )
   }
 
   bool writeStdout = false;
-  
+
+  std::unique_ptr<std::ofstream> structureFile{cStructureFile.empty() ? nullptr :
+      std::make_unique<std::ofstream>(cStructureFile.c_str(), std::fstream::binary | std::fstream::out)};
+  std::optional<viderelab::json::Dict> streamStructure;
+  if (structureFile) {
+      streamStructure.emplace(*structureFile);
+  };
+  std::optional<viderelab::json::Array> framesStructure;
+  if (streamStructure) {
+    streamStructure->StartItem("frames");
+    framesStructure.emplace(*streamStructure);
+  };
+
+  std::unique_ptr<std::ifstream> yuvFile{cReferenceFile.empty() ? nullptr :
+      std::make_unique<std::ifstream>(cReferenceFile.c_str(), std::fstream::binary | std::fstream::in)};
+  viderelab::YUVDemuxer::Parameters yuvParams{
+    .format{
+      .colorFormat{viderelab::eColorFormat::I420},
+      .dim{.width{1280u}, .height{720u}}
+    }
+  };
+  auto yuvDemuxer{viderelab::YUVDemuxer::Create(yuvParams, std::move(yuvFile))};
+
   // open output file
   std::fstream cRecFile;
   std::ostream* outStream = nullptr;
@@ -784,6 +813,12 @@ int main( int argc, char* argv[] )
 
         if( pcFrame && pcFrame->ctsValid )
         {
+          std::optional<viderelab::json::Dict> frameStructure;
+          if (framesStructure) {
+            framesStructure->StartItem();
+            frameStructure.emplace(*framesStructure);
+          };
+
           if( !handle_frame( pcFrame,
                              pcPrevField,
                              prevFrameW,
@@ -794,6 +829,8 @@ int main( int argc, char* argv[] )
                              iPrintPicHash,
                              uiFrames,
                              uiFramesTmp,
+                             frameStructure,
+                             yuvDemuxer.get(),
                              params.logLevel,
                              logStream,
                              outStream,
@@ -851,6 +888,12 @@ int main( int argc, char* argv[] )
 
       if( pcFrame && pcFrame->ctsValid )
       {
+        std::optional<viderelab::json::Dict> frameStructure;
+        if (framesStructure) {
+          framesStructure->StartItem();
+          frameStructure.emplace(*framesStructure);
+        };
+
         if( !handle_frame( pcFrame,
                            pcPrevField,
                            prevFrameW,
@@ -861,6 +904,8 @@ int main( int argc, char* argv[] )
                            iPrintPicHash,
                            uiFrames,
                            uiFramesTmp,
+                           frameStructure,
+                           yuvDemuxer.get(),
                            params.logLevel,
                            logStream,
                            outStream,
@@ -933,7 +978,7 @@ int main( int argc, char* argv[] )
       const std::string yuvMD5 = md5Buf.finalizeHex();
       if( cExpectedYuvMD5 != yuvMD5 )
       {
-        *logStream << "vvdecapp [error] full YUV output MD5 mismatch: " << cExpectedYuvMD5 << " != " << yuvMD5 << std::endl;
+        *logStream << "vvdecapp [error] full YUV output MD5 mismatch: \'" << cExpectedYuvMD5 << "\' != \'" << yuvMD5 << "\'" << std::endl;
         vvdec_accessUnit_free( accessUnit );
         return -1;
       }
@@ -1013,6 +1058,8 @@ static bool handle_frame( vvdecFrame*   pcFrame,
                           int           iPrintPicHash,
                           unsigned int& uiFrames,
                           unsigned int& uiFramesTmp,
+                          std::optional<viderelab::json::Dict>& frameStructure,
+                          viderelab::YUVDemuxer * const yuv,
                           vvdecLogLevel logLevel,
                           std::ostream* logStream,
                           std::ostream* outStream,
@@ -1061,7 +1108,13 @@ static bool handle_frame( vvdecFrame*   pcFrame,
       printSEI( dec, pcFrame, logStream );
     }
 
-    vvdec_print_pic_structure(std::cout, dec, pcFrame);
+    if (yuv) {
+        auto image{yuv->ReadFrame()};
+    }
+
+    if (frameStructure) {
+        vvdec_print_pic_structure(frameStructure.value(), dec, pcFrame);
+    }
 
     if( pcFrame->frameFormat == VVDEC_FF_PROGRESSIVE )
     {

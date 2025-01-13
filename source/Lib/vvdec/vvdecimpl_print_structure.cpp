@@ -63,161 +63,6 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace vvdec
 {
 
-namespace JSON {
-
-constexpr size_t TAB_INC{2u};
-
-class Item
-{
-protected:
-    Item(std::ostream& s, const size_t tab) :
-        m_s(s),
-        m_tab(tab) {}
-
-    inline
-    std::ostream& s() {
-        return m_s;
-    }
-
-    inline
-    size_t Tab() const {
-        return m_tab;
-    }
-
-    inline
-    size_t NumValues() const {
-        return m_numValues;
-    }
-
-    inline
-    void IncNumValues() {
-        ++m_numValues;
-    }
-
-private:
-    std::ostream& m_s;
-    const size_t m_tab{};
-    size_t m_numValues{0u};
-};
-
-class Dict : public Item
-{
-protected:
-    class Array;
-
-public:
-    Dict(std::ostream& s) :
-        Dict(s, TAB_INC) {}
-
-    ~Dict()
-    {
-        PrintTab(Item::Tab() - TAB_INC, eAction::CLOSING);
-        Item::s() << "}";
-    }
-
-    void PrintInt(const std::string& name, const int64_t i)
-    {
-        PrintTab(Item::Tab());
-        Item::s() << PrintName(name) << " : " << i;
-    }
-
-    void PrintString(const std::string& name, const std::string& value)
-    {
-        PrintTab(Item::Tab());
-        Item::s() << PrintName(name) << " : \"" << value << "\"";
-    }
-
-    Dict StartDict(const std::string& name)
-    {
-        PrintTab(Item::Tab());
-        Item::s() << PrintName(name) << " : ";
-        return Dict(Item::s(), Item::Tab() + TAB_INC);
-    }
-
-    Array StartArray(const std::string& name)
-    {
-        PrintTab(Item::Tab());
-        Item::s() << PrintName(name) << " : ";
-        return Array(Item::s(), Item::Tab() + TAB_INC);
-    }
-
-protected:
-    enum class eAction : uint32_t
-    {
-        NONE,
-        CLOSING
-    };
-
-    class Array : public Item
-    {
-    public:
-        ~Array()
-        {
-            PrintTab(Item::Tab() - TAB_INC, eAction::CLOSING);
-            Item::s() << "]";
-        }
-
-        Dict StartDict()
-        {
-            PrintTab(Item::Tab());
-            return Dict(Item::s(), Item::Tab() + TAB_INC);
-        }
-
-    protected:
-        friend class Dict;
-
-        Array(std::ostream& s, const size_t tab) :
-            Item(s, tab)
-        {
-            Item::s() << "[";
-        }
-
-    private:
-
-        void PrintTab(const size_t tab, const eAction action = eAction::NONE)
-        {
-            if ((eAction::NONE == action) && (Item::NumValues())) {
-                Item::s() << ",";
-            }
-            Item::s() << std::endl;
-            for (size_t i{0u}; i < tab; ++i) {
-                Item::s() << " ";
-            } 
-
-            Item::IncNumValues();
-        }
-    };
-
-    friend class Array;
-
-    Dict(std::ostream& s, const size_t tab) :
-        Item(s, tab)
-    {
-        Item::s() << "{";
-    }
-
-private:
-    void PrintTab(const size_t tab, const eAction action = eAction::NONE)
-    {
-        if ((eAction::NONE == action) && (Item::NumValues())) {
-            Item::s() << ",";
-        }
-        Item::s() << std::endl;
-        for (size_t i{0u}; i < tab; ++i) {
-            Item::s() << " ";
-        } 
-
-        Item::IncNumValues();
-    }
-
-    std::string PrintName(const std::string& name)
-    {
-        return "\"" + name + "\"";
-    }
-};
-
-} // namespace JSON
-
 namespace {
 
 std::string ChromaFormatToString(const ChromaFormat chromaFormat)
@@ -246,82 +91,124 @@ std::string IntraPredModeToString(const int8_t intraPredMode)
     }
 }
 
-void PrintPictureProperties(JSON::Dict &prn, const vvdecFrame& frame, const Picture& picture)
+void PrintPictureProperties(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 {
     {
         auto prnDim{prn.StartDict("dimension")};
-        prnDim.PrintInt("width", picture.cs->pcv->lumaWidth);
-        prnDim.PrintInt("height", picture.cs->pcv->lumaHeight);
+        prnDim.AddValue("width", picture.cs->pcv->lumaWidth);
+        prnDim.AddValue("height", picture.cs->pcv->lumaHeight);
     }
-    prn.PrintString("chromaFormat", ChromaFormatToString(picture.cs->pcv->chrFormat));
-    prn.PrintInt("bitDepth", picture.cs->sps->getBitDepth());
+    prn.AddValue("chromaFormat", ChromaFormatToString(picture.cs->pcv->chrFormat));
+    prn.AddValue("bitDepth", picture.cs->sps->getBitDepth());
 }
 
-void PrintCU(JSON::Dict &prn, const CodingUnit& cu)
+void PrintTU(viderelab::json::Dict &prn, const TransformUnit &tu)
 {
-    prn.PrintInt("cuIdx", cu.idx);
+}
+
+void PrintCU(viderelab::json::Dict &prn, const CodingUnit &cu)
+{
+    prn.AddValue("cu_id", cu.idx);
     {
-        auto prnPos{prn.StartDict("position")};
-        prnPos.PrintInt("x", cu.lumaPos().x);
-        prnPos.PrintInt("y", cu.lumaPos().y);
+        auto prnPos{prn.StartDict("cu_pos")};
+        prnPos.AddValue("x", cu.lumaPos().x);
+        prnPos.AddValue("y", cu.lumaPos().y);
     }
+
     {
-        auto prnSize{prn.StartDict("size")};
-        prnSize.PrintInt("width", cu.lwidth());
-        prnSize.PrintInt("height", cu.lheight());
+        auto prnSize{prn.StartDict("cu_size")};
+        prnSize.AddValue("width", cu.lwidth());
+        prnSize.AddValue("height", cu.lheight());
     }
-    prn.PrintString("channelType", (cu.chType() == CHANNEL_TYPE_LUMA) ? "luma" : "chroma");
-    prn.PrintString("predMode", (cu.predMode() == MODE_INTRA) ? "intra" : "inter");
-    if (cu.predMode() == MODE_INTRA) {
-        if (cu.chType() == CHANNEL_TYPE_LUMA) {
-            prn.PrintString("intraMode", IntraPredModeToString(cu.intraDir[0]));
+
+    prn.AddValue("cu_qp", (uint32_t) cu.qp);
+
+    {
+        auto prnPredMode{prn.StartDict("pred_mode")};
+        if (cu.predMode() == MODE_INTRA) {
+            auto prnIntraPredMode{prnPredMode.StartDict(" intra_pred_mode")};
+            if (cu.chType() == CHANNEL_TYPE_LUMA) {
+                prnIntraPredMode.AddValue(" intra_luma_pred_mode", IntraPredModeToString(cu.intraDir[0]));
+            } else {
+                prnIntraPredMode.AddValue(" intra_chroma_pred_mode", IntraPredModeToString(cu.intraDir[0]));
+            }
         } else {
-            prn.PrintString("intraMode", IntraPredModeToString(cu.intraDir[1]));
+            throw std::runtime_error("Inter prediction mode not implemented");
         }
     }
 }
 
-void PrintCTU(JSON::Dict &prn, const CtuData& ctu)
+void PrintCTU(viderelab::json::Dict &prn, const CtuData& ctu)
 {
-    prn.PrintInt("ctuIdx", ctu.ctuIdx);
-    prn.PrintInt("colIdx", ctu.colIdx);
-    prn.PrintInt("lineIdx", ctu.lineIdx);
-    prn.PrintInt("numCUs", ctu.numCUs);
-    prn.PrintInt("numTUs", ctu.numTUs);
+    prn.AddValue("ctu_id", ctu.ctuIdx);
 
-    auto prnCUs{prn.StartArray("CUs")};
-    auto cu{ctu.firstCU};
-    for (size_t i{0u}; i < ctu.numCUs; ++i) {
+    const auto ctuSize{ctu.sps->getCTUSize()};
+    {
+        auto prnCTUPos{prn.StartDict("ctu_pos")};
+        prnCTUPos.AddValue("x", ctu.colIdx * ctuSize);
+        prnCTUPos.AddValue("y", ctu.lineIdx * ctuSize);
+    }
+
+    {
+        auto prnCTUSize{prn.StartDict("ctu_size")};
+        prnCTUSize.AddValue("width", ctuSize);
+        prnCTUSize.AddValue("height", ctuSize);
+    }
+
+    //prn.AddValue("ctu_qp",
+    //prn.AddValue("cu_split_flags",
+
+    auto prnPartModes{prn.StartDict("cu_part_modes")};
+    prnPartModes.AddValue("numCUs", ctu.numCUs);
+    auto prnCUs{prnPartModes.StartArray("CUs")};
+
+    for (auto cu{ctu.firstCU}; cu != nullptr; cu = cu->next) {
         auto prnCU{prnCUs.StartDict()};
         PrintCU(prnCU, *cu);
-        cu = cu->next;
     }
 }
 
-void PrintPicture(JSON::Dict &prn, const vvdecFrame& frame, const Picture& picture)
+void PrintPictureHeader(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 {
-    prn.PrintInt("index", frame.sequenceNumber);
+    prn.AddValue("numSlices", picture.slices.size());
+
+    auto prnSlices{prn.StartArray("slices")};
+    for (const auto &slice : picture.slices) {
+        auto prnSlice{prnSlices.StartDict()};
+
+        auto prnSliceHeader{prnSlice.StartDict("slice_header")};
+        auto prnSliceSegmentLayerRbsp{prnSliceHeader.StartDict("slice_segment_layer_rbsp")};
+
+        const auto numCTUs{slice->getNumCtuInSlice()};
+        prnSliceSegmentLayerRbsp.AddValue("numCTUs", numCTUs);
+
+        auto prnCTUs{prnSliceSegmentLayerRbsp.StartArray("CTUs")};
+        for (size_t ctuIdx{0u}; ctuIdx < numCTUs; ++ctuIdx) {
+            auto prnCTU{prnCTUs.StartDict()};
+            auto ctu_id{slice->getCtuAddrInSlice(ctuIdx)};
+            const auto &ctu{picture.cs->getCtuData(ctu_id)};
+
+            PrintCTU(prnCTU, ctu);
+        }
+    }
+}
+
+void PrintPicture(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
+{
+    prn.AddValue("frame_index", frame.sequenceNumber);
     {
         auto prnProps{prn.StartDict("properties")};
         PrintPictureProperties(prnProps, frame, picture);
     }
-    const size_t sizeInCTUs{picture.cs->pcv->sizeInCtus};
-    prn.PrintInt("sizeInCTUs", sizeInCTUs);
 
-    auto prnCTUs{prn.StartArray("CTUs")};
+    auto prnPictureHeader{prn.StartDict("picture_header")};
+    PrintPictureHeader(prnPictureHeader, frame, picture);
 
-    for (size_t i{0u}; i < 2/*sizeInCTUs*/; ++i) {
-        auto prnCTU{prnCTUs.StartDict()};
-        const auto ctu{picture.cs->getCtuData((int)i)};
-
-        PrintCTU(prnCTU, ctu);
-    }
-
-} // void PrintPicture(JSON::Dict &prn, const vvdecFrame& frame, const Picture& picture)
+} // void PrintPicture(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 
 } // namespace
 
-int VVDecImpl::printPicStructure(std::ostream& s, const vvdecFrame* frame) const
+int VVDecImpl::printPicStructure(viderelab::json::Dict &prnFrame, const vvdecFrame* frame) const
 {
   if( !m_bInitialized )      { return VVDEC_ERR_INITIALIZE; }
 
@@ -347,25 +234,7 @@ int VVDecImpl::printPicStructure(std::ostream& s, const vvdecFrame* frame) const
     return VVDEC_ERR_PARAMETER;
   }
 
-  {
-    JSON::Dict prn(s);
-    auto prnFrames{prn.StartArray("frames")};
-    auto prnFrame{prnFrames.StartDict()};
-
-    PrintPicture(prnFrame, *frame, *picture);
-  }
-
-  /*
-  s << "Picture structure for frame " << frame->sequenceNumber << std::endl;
-  const size_t numCtu{picture->cs->pcv->sizeInCtus};
-  s << "Number of Ctu's: " << numCtu << std::endl;
-
-  for (size_t i{0u}; i < numCtu; ++i)
-  {
-    const auto ctu{picture->cs->getCtuData(i)};
-
-    s << "Ctu #" << ctu.ctuIdx << "x: " << ctu.colIdx << " y: " << ctu.lineIdx << std::endl;
-  }*/
+  PrintPicture(prnFrame, *frame, *picture);
 
   return VVDEC_OK;
 }

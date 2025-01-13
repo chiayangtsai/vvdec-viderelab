@@ -42,6 +42,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef VVDEC_VVDEC_H
 #define VVDEC_VVDEC_H
 
+#include <viderelab/common/json.hpp>
+
 #include "vvdec/vvdecDecl.h"
 
 #include <stdio.h>
@@ -562,7 +564,7 @@ VVDEC_DECL int vvdec_set_logging_callback(vvdecDecoder*, vvdecLoggingCallback ca
 */
 VVDEC_DECL int vvdec_decode( vvdecDecoder *, vvdecAccessUnit *accessUnit, vvdecFrame **frame );
 
-VVDEC_DECL int vvdec_print_pic_structure(std::ostream& s, const vvdecDecoder* dec, const vvdecFrame* frame);
+VVDEC_DECL int vvdec_print_pic_structure(viderelab::json::Dict& prnFrame, const vvdecDecoder* dec, const vvdecFrame* frame);
 
 /* vvdec_flush
   This method flushes the decoder.

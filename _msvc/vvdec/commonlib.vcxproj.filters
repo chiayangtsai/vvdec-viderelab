@@ -10,6 +10,24 @@
     <Filter Include="source\lib\commonlib">
       <UniqueIdentifier>{4b474fb5-2047-4a92-ace8-afb505f248b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="viderelab">
+      <UniqueIdentifier>{1af5d3c5-976c-43b6-a1fb-7279112ca62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="viderelab\common">
+      <UniqueIdentifier>{5a8d6b37-1431-4af6-b072-37d29abe0062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="viderelab\common\src">
+      <UniqueIdentifier>{4ff28fb1-4b26-4cbe-8c67-15fc205702bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="viderelab\common\inc">
+      <UniqueIdentifier>{18f729d9-6745-4f28-a113-f1a4193f5a5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="viderelab\demuxers">
+      <UniqueIdentifier>{2c33c61a-c614-40d6-af5d-0f958c2d7f08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="viderelab\demuxers\src">
+      <UniqueIdentifier>{d1b25a7b-963f-485f-9b8e-06d596140658}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.cpp">
@@ -113,6 +131,18 @@
     </ClCompile>
     <ClCompile Include="..\..\source\Lib\CommonLib\WeightPrediction.cpp">
       <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\viderelab\common\src\image_format.cpp">
+      <Filter>viderelab\common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\viderelab\common\src\image.cpp">
+      <Filter>viderelab\common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\viderelab\common\src\color_format.cpp">
+      <Filter>viderelab\common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\viderelab\demuxers\src\yuv_demuxer.cpp">
+      <Filter>viderelab\demuxers\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +268,36 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Lib\CommonLib\WeightPrediction.h">
       <Filter>source\lib\commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\color_format.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\image_format.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\types.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\image.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\templates.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\inc\image_format.hpp">
+      <Filter>viderelab\common\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\frame.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\demuxers\yuv_demuxer.hpp">
+      <Filter>viderelab\demuxers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\exception.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\json.hpp">
+      <Filter>viderelab\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,12 @@
     <Filter Include="source\lib\vvdec">
       <UniqueIdentifier>{e841e47b-4fed-4bc0-94d3-aa1a83431023}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{6e284cac-5d91-4df4-8810-4e06f054ea15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\vvdec">
+      <UniqueIdentifier>{24ef1bd8-4bb5-44c6-923f-275bd89356b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Lib\vvdec\resource.h">
@@ -23,6 +29,15 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Lib\vvdec\wasm_bindings.h">
       <Filter>source\lib\vvdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\vvdec\sei.h">
+      <Filter>include\vvdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\vvdec\vvdec.h">
+      <Filter>include\vvdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\vvdec\vvdecDecl.h">
+      <Filter>include\vvdec</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

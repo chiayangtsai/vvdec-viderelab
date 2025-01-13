@@ -45,6 +45,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "vvdec/vvdec.h"
 #include "DecoderLib/DecLib.h"             // internal decoder
 
+#include <viderelab/common/json.hpp>
+
 namespace vvdec {
 
 class FilmGrain;
@@ -146,7 +148,7 @@ public:
   void setLoggingCallback( vvdecLoggingCallback callback );
 
   int decode( vvdecAccessUnit& accessUnit, vvdecFrame** ppframe );
-  int printPicStructure(std::ostream& s, const vvdecFrame *frame) const;
+  int printPicStructure(viderelab::json::Dict &prnFrame, const vvdecFrame *frame) const;
 
   int flush( vvdecFrame** ppcFrame );
 

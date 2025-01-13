@@ -165,11 +165,13 @@ public:
     std::cout <<   "\t YUV output options" << std::endl;
     std::cout <<   std::endl;
     std::cout <<   "\t\t [--output,-o  <str>        ] : yuv output file (default: not set)" << std::endl;
+    std::cout <<   "\t\t [--structure,-s  <str>     ] : output structure file (default: not set)" << std::endl;
     if( fullHelp )
     {
       std::cout << "\t\t [--upscale,-uo             ] : set upscaling mode for RPR pictures(default: 0: off, 1: copy without rescaling, 2: rescale to target resolution)" << std::endl;
       std::cout << "\t\t [--filmGrain,-fg <int>     ] : set film grain synthesis using Film Grain Charactersitics SEI (default: 1, off: 0, on: 1)" << std::endl;
     }
+    std::cout <<   "\t\t [--reference,-r  <str>     ] : reference yuv file (default: not set)" << std::endl;
     std::cout <<   "\t\t [--y4m                     ] : force y4m output (for pipe output; auto enable for .y4m output file extension)" << std::endl;
     std::cout <<   std::endl;
     std::cout <<   "\t Decoder Options" << std::endl;
@@ -222,6 +224,8 @@ public:
                           vvdecParams& rcParams,
                           std::string& rcBitstreamFile,
                           std::string& rcOutputFile,
+                          std::string& rcStructureFile,
+                          std::string& rcReferenceFile,
                           int&         riFrames,
                           int&         riLoops,
                           std::string& rcExpectYuvMD5,
@@ -305,6 +309,16 @@ public:
       {
         if( rcParams.logLevel > VVDEC_VERBOSE )
           fprintf( stdout, "[output] yuv-file:    %s\n", argv[m_iArg] );
+      }
+      else if( parse_param( { "-s", "--structure" }, rcStructureFile ) ) /* Out: structure-file */
+      {
+        if( rcParams.logLevel > VVDEC_VERBOSE )
+          fprintf( stdout, "[structure] structure-file:    %s\n", argv[m_iArg] );
+      }
+      else if( parse_param( { "-r", "--reference" }, rcReferenceFile ) ) /* In: reference .yuv file */
+      {
+        if( rcParams.logLevel > VVDEC_VERBOSE )
+          fprintf( stdout, "[reference] yuv-file:    %s\n", argv[m_iArg] );
       }
       else if( parse_param( { "-uo", "--upscale" }, upscale_output ) ) /* In: upscale */
       {

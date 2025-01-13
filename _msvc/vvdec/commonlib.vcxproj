@@ -53,6 +53,10 @@
     <ClCompile Include="..\..\source\Lib\CommonLib\UnitPartitioner.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\UnitTools.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\WeightPrediction.cpp" />
+    <ClCompile Include="..\..\viderelab\common\src\color_format.cpp" />
+    <ClCompile Include="..\..\viderelab\common\src\image.cpp" />
+    <ClCompile Include="..\..\viderelab\common\src\image_format.cpp" />
+    <ClCompile Include="..\..\viderelab\demuxers\src\yuv_demuxer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.h" />
@@ -96,6 +100,16 @@
     <ClInclude Include="..\..\source\Lib\CommonLib\UnitPartitioner.h" />
     <ClInclude Include="..\..\source\Lib\CommonLib\UnitTools.h" />
     <ClInclude Include="..\..\source\Lib\CommonLib\WeightPrediction.h" />
+    <ClInclude Include="..\..\viderelab\common\color_format.hpp" />
+    <ClInclude Include="..\..\viderelab\common\exception.hpp" />
+    <ClInclude Include="..\..\viderelab\common\frame.hpp" />
+    <ClInclude Include="..\..\viderelab\common\inc\image_format.hpp" />
+    <ClInclude Include="..\..\viderelab\common\json.hpp" />
+    <ClInclude Include="..\..\viderelab\common\templates.hpp" />
+    <ClInclude Include="..\..\viderelab\common\image.hpp" />
+    <ClInclude Include="..\..\viderelab\common\image_format.hpp" />
+    <ClInclude Include="..\..\viderelab\common\types.hpp" />
+    <ClInclude Include="..\..\viderelab\demuxers\yuv_demuxer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -172,7 +186,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../..;../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -189,7 +203,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../..;../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -206,7 +220,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../..;../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -223,7 +237,7 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../..;../../build/release-static;../../include;../../source/Lib;../../source/Lib/CommonLib;../../thirdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
