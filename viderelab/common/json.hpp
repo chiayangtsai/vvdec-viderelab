@@ -4,6 +4,7 @@
 #if !defined(__VIDERELAB_COMMON_JSON_H__)
 #define __VIDERELAB_COMMON_JSON_H__
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 

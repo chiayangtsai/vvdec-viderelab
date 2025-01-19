@@ -77,7 +77,7 @@ set( VVDEC_ENABLE_X86_SIMD   TRUE                      CACHE BOOL "enable x86 in
 set( VVDEC_ENABLE_ARM_SIMD   ${VVDEC_ARM_SIMD_DEFAULT} CACHE BOOL "enable ARM intrinsics" )
 
 set( VVDEC_ENABLE_TRACING    FALSE                     CACHE BOOL "Compile in tracing functionality" )
-set( VVDEC_ENABLE_FILM_GRAIN TRUE                      CACHE BOOL "Build with film grain synthesis support" )
+set( VVDEC_ENABLE_FILM_GRAIN FALSE                     CACHE BOOL "Build with film grain synthesis support" )
 
 include( vvdecCompilerSupport )
 
@@ -247,8 +247,8 @@ if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE )
 endif()
 
-# set c++14
-set( CMAKE_CXX_STANDARD 14 )
+# set c++20
+set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 # compile everything position independent (even static libraries)
