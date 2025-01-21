@@ -299,5 +299,8 @@
     <ClInclude Include="..\..\viderelab\common\json.hpp">
       <Filter>viderelab\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\viderelab\common\platform.hpp">
+      <Filter>viderelab\common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

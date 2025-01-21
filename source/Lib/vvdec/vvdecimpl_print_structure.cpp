@@ -58,6 +58,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #  include "FilmGrain/FilmGrain.h"
 #endif   // ENABLE_FILM_GRAIN
 
+#include <viderelab/common/platform.hpp>
+
 #include <format>
 
 namespace vvdec

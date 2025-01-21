@@ -105,6 +105,7 @@
     <ClInclude Include="..\..\viderelab\common\frame.hpp" />
     <ClInclude Include="..\..\viderelab\common\inc\image_format.hpp" />
     <ClInclude Include="..\..\viderelab\common\json.hpp" />
+    <ClInclude Include="..\..\viderelab\common\platform.hpp" />
     <ClInclude Include="..\..\viderelab\common\templates.hpp" />
     <ClInclude Include="..\..\viderelab\common\image.hpp" />
     <ClInclude Include="..\..\viderelab\common\image_format.hpp" />

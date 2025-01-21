@@ -4,6 +4,8 @@
 #if !defined(__VIDERELAB_COMMON_EXCEPTION_H__)
 #define __VIDERELAB_COMMON_EXCEPTION_H__
 
+#include <viderelab/common/platform.hpp>
+
 #include <format>
 #if defined(__cpp_lib_stacktrace)
 #include <stacktrace>
