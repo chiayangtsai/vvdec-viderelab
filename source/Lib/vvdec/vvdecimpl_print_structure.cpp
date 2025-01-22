@@ -110,7 +110,7 @@ void PrintTU(viderelab::json::Dict &prn, const TransformUnit &tu)
 
 void PrintCU(viderelab::json::Dict &prn, const CodingUnit &cu)
 {
-    prn.AddValue("cu_id", cu.idx);
+    prn.AddValue("cu_id", cu.idx - 1);
     {
         auto prnPos{prn.StartDict("cu_pos")};
         prnPos.AddValue("x", cu.lumaPos().x);
@@ -124,19 +124,24 @@ void PrintCU(viderelab::json::Dict &prn, const CodingUnit &cu)
     }
 
     prn.AddValue("cu_qp", (uint32_t) cu.qp);
+    prn.AddValue("pred_mode", (cu.predMode() == MODE_INTRA) ? "intra" : "inter");
 
-    {
-        auto prnPredMode{prn.StartDict("pred_mode")};
-        if (cu.predMode() == MODE_INTRA) {
-            auto prnIntraPredMode{prnPredMode.StartDict(" intra_pred_mode")};
-            if (cu.chType() == CHANNEL_TYPE_LUMA) {
-                prnIntraPredMode.AddValue(" intra_luma_pred_mode", IntraPredModeToString(cu.intraDir[0]));
-            } else {
-                prnIntraPredMode.AddValue(" intra_chroma_pred_mode", IntraPredModeToString(cu.intraDir[0]));
-            }
-        } else {
-            throw std::runtime_error("Inter prediction mode not implemented");
+    if (cu.predMode() == MODE_INTRA) {
+        prn.AddValue("num_pus", 1u);
+        auto prnPUs{prn.StartArray("pu-info")};
+        auto pu{prnPUs.StartDict()};
+        pu.AddValue("pu_id", 0u);
+        {
+            auto prnPos{pu.StartDict("pu_pos")};
+            prnPos.AddValue("x", cu.lumaPos().x);
+            prnPos.AddValue("y", cu.lumaPos().y);
         }
+        {
+            auto prnSize{pu.StartDict("pu_size")};
+            prnSize.AddValue("width", cu.lwidth());
+            prnSize.AddValue("height", cu.lheight());
+        }
+        pu.AddValue("pu_mode", static_cast<uint32_t>(cu.intraDir[CHANNEL_TYPE_LUMA]));
     }
 }
 
@@ -159,10 +164,8 @@ void PrintCTU(viderelab::json::Dict &prn, const CtuData& ctu)
 
     //prn.AddValue("ctu_qp",
     //prn.AddValue("cu_split_flags",
-
-    auto prnPartModes{prn.StartDict("cu_part_modes")};
-    prnPartModes.AddValue("numCUs", ctu.numCUs);
-    auto prnCUs{prnPartModes.StartArray("CUs")};
+    prn.AddValue("num_cus", ctu.numCUs);
+    auto prnCUs{prn.StartArray("cu-info")};
 
     for (auto cu{ctu.firstCU}; cu != nullptr; cu = cu->next) {
         auto prnCU{prnCUs.StartDict()};
@@ -172,19 +175,18 @@ void PrintCTU(viderelab::json::Dict &prn, const CtuData& ctu)
 
 void PrintPictureHeader(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 {
-    prn.AddValue("numSlices", picture.slices.size());
+    prn.AddValue("num_slices", picture.slices.size());
 
-    auto prnSlices{prn.StartArray("slices")};
+    auto prnSlices{prn.StartArray("slice-info")};
     for (const auto &slice : picture.slices) {
         auto prnSlice{prnSlices.StartDict()};
 
-        auto prnSliceHeader{prnSlice.StartDict("slice_header")};
-        auto prnSliceSegmentLayerRbsp{prnSliceHeader.StartDict("slice_segment_layer_rbsp")};
-
+        prnSlice.AddValue("slice_qp", slice->getSliceQp());
         const auto numCTUs{slice->getNumCtuInSlice()};
-        prnSliceSegmentLayerRbsp.AddValue("numCTUs", numCTUs);
+        prnSlice.AddValue("num_ctus", numCTUs);
 
-        auto prnCTUs{prnSliceSegmentLayerRbsp.StartArray("CTUs")};
+        auto prnCTUs{prnSlice.StartArray("ctu-info")};
+
         for (size_t ctuIdx{0u}; ctuIdx < numCTUs; ++ctuIdx) {
             auto prnCTU{prnCTUs.StartDict()};
             auto ctu_id{slice->getCtuAddrInSlice(ctuIdx)};
@@ -198,13 +200,13 @@ void PrintPictureHeader(viderelab::json::Dict &prn, const vvdecFrame& frame, con
 void PrintPicture(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 {
     prn.AddValue("frame_index", frame.sequenceNumber);
+    prn.AddValue("poc", picture.getPOC());
     {
         auto prnProps{prn.StartDict("properties")};
         PrintPictureProperties(prnProps, frame, picture);
     }
 
-    auto prnPictureHeader{prn.StartDict("picture_header")};
-    PrintPictureHeader(prnPictureHeader, frame, picture);
+    PrintPictureHeader(prn, frame, picture);
 
 } // void PrintPicture(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 

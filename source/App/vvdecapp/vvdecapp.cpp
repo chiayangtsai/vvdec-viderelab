@@ -546,7 +546,7 @@ int main( int argc, char* argv[] )
   };
   std::optional<viderelab::json::Array> framesStructure;
   if (streamStructure) {
-    streamStructure->StartItem("frames");
+    streamStructure->StartItem("pic-info");
     framesStructure.emplace(*streamStructure);
   };
 

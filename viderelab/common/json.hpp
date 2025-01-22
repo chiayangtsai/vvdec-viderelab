@@ -82,16 +82,21 @@ public:
     }
 
     template <typename T>
-    void AddValue(const std::string &name, const T value) 
+    void AddValue(const std::string &name, const T value)
     {
         StartItem(name);
         Item::s() << value;
     }
 
-    void AddValue(const std::string &name, const std::string &value)
+    void AddValue(const std::string &name, const char *value)
     {
         StartItem(name);
         Item::s() << "\"" << value << "\"";
+    }
+
+    void AddValue(const std::string &name, const std::string &value)
+    {
+        AddValue(name, value.c_str());
     }
 
     Dict StartDict(const std::string &name)
