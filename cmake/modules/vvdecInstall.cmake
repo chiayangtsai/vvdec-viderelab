@@ -58,12 +58,19 @@ target_include_directories( vvdec  SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_
 install( FILES     ${CMAKE_BINARY_DIR}/vvdec/version.h  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vvdec )
 install( DIRECTORY include/vvdec                        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
 
-if( VVDEC_INSTALL_VVDECAPP OR (${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten") )
-    # for Emscripten/WASM builds vvdecapp is always installed, since that is used like a library
-    set( INSTALL_TARGETS "vvdec;vvdecapp" )
-else()
-    set( INSTALL_TARGETS "vvdec" )
-    install( CODE "message( WARNING \"\nThe vvdecapp binary is not installed by default anymore. To also install vvdecapp set '-DVVDEC_INSTALL_VVDECAPP=ON' (with make: 'install-vvdecapp=1')\" )" )
+if( VVDEC_INSTALL_VVDECAPP AND VVDEC_LIBRARY_ONLY )
+  message( FATAL_ERROR "VVDEC_INSTALL_VVDECAPP conflicts with VVDEC_LIBRARY_ONLY" )
+endif()
+
+set( INSTALL_TARGETS vvdec )
+
+if( NOT VVDEC_LIBRARY_ONLY )
+  if( VVDEC_INSTALL_VVDECAPP
+      OR (${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten") ) # for Emscripten/WASM builds vvdecapp is always installed, since that is used like a library
+    list( APPEND INSTALL_TARGETS vvdecapp )
+  else()
+    install( CODE "message( NOTICE \"The vvdecapp binary is not installed by default any more. To also install vvdecapp set '-DVVDEC_INSTALL_VVDECAPP=ON' (with make: 'install-vvdecapp=1')\" )" )
+  endif()
 endif()
 
 
@@ -71,6 +78,7 @@ endif()
 install_targets( "${INSTALL_TARGETS}" Release )
 install_targets( "${INSTALL_TARGETS}" Debug )
 install_targets( "${INSTALL_TARGETS}" RelWithDebInfo )
+install_targets( "${INSTALL_TARGETS}" MinSizeRel )
 
 # install pdb files
 install_lib_pdb( vvdec )
@@ -79,7 +87,7 @@ if( VVDEC_INSTALL_VVDECAPP )
 endif()
 
 # install emscripten generated files
-if( ${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten" )
+if( ${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten" AND VVDEC_INSTALL_VVDECAPP)
   install( PROGRAMS $<TARGET_FILE_DIR:vvdecapp>/vvdecapp.wasm DESTINATION ${RUNTIME_DEST} )
   install( PROGRAMS $<TARGET_FILE_DIR:vvdecapp>/vvdecapp.worker.js DESTINATION ${RUNTIME_DEST} )
 endif()
@@ -102,7 +110,49 @@ endif()
 install( EXPORT vvdecTargets-release        NAMESPACE vvdec:: FILE vvdecTargets-${CONFIG_POSTFIX}.cmake CONFIGURATIONS Release        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/vvdec )
 install( EXPORT vvdecTargets-debug          NAMESPACE vvdec:: FILE vvdecTargets-${CONFIG_POSTFIX}.cmake CONFIGURATIONS Debug          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/vvdec )
 install( EXPORT vvdecTargets-relwithdebinfo NAMESPACE vvdec:: FILE vvdecTargets-${CONFIG_POSTFIX}.cmake CONFIGURATIONS RelWithDebInfo DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/vvdec )
+install( EXPORT vvdecTargets-minsizerel     NAMESPACE vvdec:: FILE vvdecTargets-${CONFIG_POSTFIX}.cmake CONFIGURATIONS MinSizeRel     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/vvdec )
 
+
+function( resolve_target_interface_libs TGT OUT_VAR )
+  get_target_property( interface_libs ${TGT} INTERFACE_LINK_LIBRARIES )
+
+  foreach( lib ${interface_libs} )
+    if( TARGET ${lib} )
+      # if it is a target and not a -llibrary, we need to further resolve it
+      resolve_target_interface_libs( ${lib} lib )
+    endif()
+
+    list( APPEND ret ${lib} )
+  endforeach()
+
+  set( ${OUT_VAR} ${ret} PARENT_SCOPE )
+endfunction()
+
+# create pkg-config file
+set( VVDEC_PKG_EXTRA_LIBS ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES} )
+if( VVDEC_PKG_EXTRA_LIBS )
+  foreach( LIB ${VVDEC_PKG_EXTRA_LIBS} )
+    if((IS_ABSOLUTE ${LIB} AND EXISTS ${LIB}) OR (${LIB} MATCHES "^-"))
+      list( APPEND EXTRALIBS ${LIB} )
+    else()
+      list( APPEND EXTRALIBS "-l${LIB}" )
+    endif()
+  endforeach()
+
+  if( EXTRALIBS )
+    set(VVDEC_PKG_EXTRA_LIBS ${EXTRALIBS})
+  endif()
+
+  list( REMOVE_ITEM VVDEC_PKG_EXTRA_LIBS "-lc" )
+  list( REMOVE_ITEM VVDEC_PKG_EXTRA_LIBS "-lgcc_s" )
+endif()
+
+resolve_target_interface_libs( vvdec VVDEC_PKG_INTERFACE_LIBS )
+if( VVDEC_PKG_INTERFACE_LIBS )
+  list( APPEND VVDEC_PKG_EXTRA_LIBS ${VVDEC_PKG_INTERFACE_LIBS} )
+endif()
+
+list( JOIN VVDEC_PKG_EXTRA_LIBS " " VVDEC_PKG_EXTRA_LIBS  )
 configure_file( pkgconfig/libvvdec.pc.in ${CMAKE_CURRENT_BINARY_DIR}/pkgconfig/libvvdec.pc @ONLY )
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/pkgconfig/libvvdec.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig )
 

@@ -27,11 +27,9 @@
 #if !defined(SIMDE_ARM_NEON_QDMLSL_H)
 #define SIMDE_ARM_NEON_QDMLSL_H
 
-#include "sub.h"
-#include "mul.h"
-#include "mul_n.h"
-#include "movl.h"
 #include "types.h"
+#include "qsub.h"
+#include "qdmull.h"
 
 HEDLEY_DIAGNOSTIC_PUSH
 SIMDE_DISABLE_UNWANTED_DIAGNOSTICS
@@ -43,7 +41,7 @@ simde_vqdmlslh_s16(int32_t a, int16_t b, int16_t c) {
   #if defined(SIMDE_ARM_NEON_A64V8_NATIVE)
     return vqdmlslh_s16(a, b, c);
   #else
-    return a - HEDLEY_STATIC_CAST(int32_t, b) * HEDLEY_STATIC_CAST(int32_t, c) * 2;
+    return simde_vqsubs_s32(a, simde_vqdmullh_s16(b, c));
   #endif
 }
 #if defined(SIMDE_ARM_NEON_A64V8_ENABLE_NATIVE_ALIASES)
@@ -57,7 +55,7 @@ simde_vqdmlsls_s32(int64_t a, int32_t b, int32_t c) {
   #if defined(SIMDE_ARM_NEON_A64V8_NATIVE)
     return vqdmlsls_s32(a, b, c);
   #else
-    return a - HEDLEY_STATIC_CAST(int64_t, b) * HEDLEY_STATIC_CAST(int64_t, c) * 2;
+    return simde_vqsubd_s64(a, simde_vqdmulls_s32(b, c));
   #endif
 }
 #if defined(SIMDE_ARM_NEON_A64V8_ENABLE_NATIVE_ALIASES)
@@ -71,7 +69,7 @@ simde_vqdmlsl_s16(simde_int32x4_t a, simde_int16x4_t b, simde_int16x4_t c) {
   #if defined(SIMDE_ARM_NEON_A32V7_NATIVE)
     return vqdmlsl_s16(a, b, c);
   #else
-    return simde_vsubq_s32(a, simde_vmulq_n_s32(simde_vmulq_s32(simde_vmovl_s16(b), simde_vmovl_s16(c)), 2));
+    return simde_vqsubq_s32(a, simde_vqdmull_s16(b, c));
   #endif
 }
 #if defined(SIMDE_ARM_NEON_A32V7_ENABLE_NATIVE_ALIASES)
@@ -85,17 +83,7 @@ simde_vqdmlsl_s32(simde_int64x2_t a, simde_int32x2_t b, simde_int32x2_t c) {
   #if defined(SIMDE_ARM_NEON_A32V7_NATIVE)
     return vqdmlsl_s32(a, b, c);
   #else
-    simde_int64x2_private r_ = simde_int64x2_to_private(
-          simde_x_vmulq_s64(
-          simde_vmovl_s32(b),
-          simde_vmovl_s32(c)));
-
-    SIMDE_VECTORIZE
-    for (size_t i = 0 ; i < (sizeof(r_.values) / sizeof(r_.values[0])) ; i++) {
-      r_.values[i] = r_.values[i] * HEDLEY_STATIC_CAST(int64_t, 2);
-    }
-
-    return simde_vsubq_s64(a, simde_int64x2_from_private(r_));
+    return simde_vqsubq_s64(a, simde_vqdmull_s32(b, c));
   #endif
 }
 #if defined(SIMDE_ARM_NEON_A32V7_ENABLE_NATIVE_ALIASES)

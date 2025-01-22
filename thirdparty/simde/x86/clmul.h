@@ -101,6 +101,10 @@ simde_x_bitreverse_u64(uint64_t v) {
     return HEDLEY_STATIC_CAST(uint64_t, _mm_cvtsi128_si64(vec));
   #elif HEDLEY_HAS_BUILTIN(__builtin_bitreverse64)
     return __builtin_bitreverse64(v);
+  #elif defined(__loongarch64)
+    uint64_t r;
+    __asm__ __volatile__ ("bitrev.d %0, %1" :"=&r"(r):"r"(v):);
+    return r;
   #else
     v = ((v >>  1) & UINT64_C(0x5555555555555555)) | ((v & UINT64_C(0x5555555555555555)) <<  1);
     v = ((v >>  2) & UINT64_C(0x3333333333333333)) | ((v & UINT64_C(0x3333333333333333)) <<  2);
@@ -199,7 +203,7 @@ simde_mm_clmulepi64_si128 (simde__m128i a, simde__m128i b, const int imm8)
   #else
     #define simde_mm_clmulepi64_si128(a, b, imm8) _mm_clmulepi64_si128(a, b, imm8)
   #endif
-#elif defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(__ARM_FEATURE_AES) && !defined(__clang__)
+#elif defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(SIMDE_ARCH_ARM_AES) && !defined(__clang__)
   #define simde_mm_clmulepi64_si128(a, b, imm8) \
     simde__m128i_from_neon_u64( \
       vreinterpretq_u64_p128( \

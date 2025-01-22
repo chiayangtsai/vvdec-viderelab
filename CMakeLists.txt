@@ -7,11 +7,11 @@ cmake_minimum_required( VERSION 3.12.0 FATAL_ERROR )
 cmake_policy( VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} )
 
 # project name
-project( vvdec VERSION 2.3.0 )
+project( vvdec VERSION 3.0.0 )
 # set alternative version numbering for release candidates
-#set( PROJECT_VERSION_RC rc1 )
+#set( PROJECT_VERSION_RC rc3 )
 if( PROJECT_VERSION_RC )
-    set( PROJECT_VERSION "${PROJECT_VERSION}-rc${PROJECT_VERSION_RC}" )
+    set( PROJECT_VERSION "${PROJECT_VERSION}-${PROJECT_VERSION_RC}" )
 endif()
 
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" )
@@ -24,66 +24,26 @@ message( STATUS "CMAKE_MODULE_PATH: updating module path to: ${CMAKE_MODULE_PATH
 #     message(STATUS "${_variableName}=${${_variableName}}")
 # endforeach()
 
-function( append_cpu_type_guess output_list input_str )
-  set( ret ${${output_list}} )
+include( vvdecCompilerSupport )
 
-  string( TOLOWER "${input_str}" input_lower )
-  if( ${input_lower} MATCHES "x86\|i386\|x64\|win32\|amd64" )
-    list( APPEND ret "X86" )
-  elseif( ${input_lower} MATCHES "aarch64\|arm")
-    list( APPEND ret "ARM" )
-  endif()
-
-  set( ${output_list} ${ret} PARENT_SCOPE )
-endfunction()
-
-# try to detect the actual target architecture
-if( ${CMAKE_SYSTEM_NAME} STREQUAL "Emscripten" )
-  message( DEBUG  "Emscripten" )
-  # Emscripten doesn't set the CMAKE_SYSTEM_PROCESSOR
-  list( PREPEND vvdec_target_arch_list "WASM" )
-elseif( NOT CMAKE_SYSTEM_PROCESSOR STREQUAL CMAKE_HOST_SYSTEM_PROCESSOR )
-  message( DEBUG  "sys != host ${CMAKE_SYSTEM_PROCESSOR} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR} " )
-  # cross compiling: CMAKE_SYSTEM_PROCESSOR was set explicitly, so we use that as first guess
-  append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_SYSTEM_PROCESSOR}" )
-endif()
-
-# build list of architectures in order of probability
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_VS_PLATFORM_NAME}" )
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_OSX_ARCHITECTURES}" )
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}" ) # set by msvc, wen not using msbuild
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_ANDROID_ARCH_ABI}" )
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_C_LIBRARY_ARCHITECTURE}" )
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_SYSTEM_PROCESSOR}" )
-append_cpu_type_guess( vvdec_target_arch_list "${CMAKE_HOST_SYSTEM_PROCESSOR}" )
-list( APPEND vvdec_target_arch_list "UNKNOWN" ) # no architecture for which we have specific optimizations
-message( DEBUG "vvdec_target_arch_list: ${vvdec_target_arch_list}" )
-
-# get most probable architecture
-list( POP_FRONT vvdec_target_arch_list VVDEC_TARGET_ARCH )
-message( STATUS "normalized target architecture: ${VVDEC_TARGET_ARCH}" )
-unset( vvdec_target_arch_list )
-
+detect_target_architecture( VVDEC_TARGET_ARCH )
 if( VVDEC_TARGET_ARCH STREQUAL "ARM" )
   set( VVDEC_ARM_SIMD_DEFAULT TRUE )
-  if( MSVC )
-    message( STATUS "ARM SIMD intinsics disabling default on MSVC" )
-    set( VVDEC_ARM_SIMD_DEFAULT FALSE )
-  endif()
+endif()
+
+if( VVDEC_TARGET_ARCH MATCHES "LOONGARCH64" )
+  set( VVDEC_LOONGARCH64_SIMD_DEFAULT TRUE )
 endif()
 
 # we enable x86 intrinsics for all target architectures, because they are implemented through simd-everywhere on non-x86
 set( VVDEC_ENABLE_X86_SIMD   TRUE                      CACHE BOOL "enable x86 intrinsics" )
 set( VVDEC_ENABLE_ARM_SIMD   ${VVDEC_ARM_SIMD_DEFAULT} CACHE BOOL "enable ARM intrinsics" )
+set( VVDEC_ENABLE_LOONGARCH64_LSX_SIMD  ${VVDEC_LOONGARCH64_SIMD_DEFAULT} CACHE BOOL "enable loongarch64 LSX intrinsics" )
 
 set( VVDEC_ENABLE_TRACING    FALSE                     CACHE BOOL "Compile in tracing functionality" )
-set( VVDEC_ENABLE_FILM_GRAIN TRUE                      CACHE BOOL "Build with film grain synthesis support" )
-
-include( vvdecCompilerSupport )
 
 # enable sse4.1 build for all source files for gcc and clang
 if( VVDEC_ENABLE_X86_SIMD )
-
   if( UNIX OR MINGW )
     # when building for non-x86, but emulating simd using simd-everywhere (e.g. on ARM),
     # the x86-compiler flags are not understood by the compiler
@@ -102,11 +62,32 @@ if( VVDEC_ENABLE_X86_SIMD )
   # seen any, so it's disabled for now (GH)
   #set_if_compiler_supports_flag( FLAG_openmp_simd -fopenmp-simd )
   #add_compile_options( ${FLAG_openmp_simd} )
+
+  if( VVDEC_TARGET_ARCH STREQUAL "ARM" )
+    set_if_compiler_supports_flag( FLAG_mfpu_neon -mfpu=neon  )
+    set_if_compiler_supports_flag( FLAG_mfloat_abi_hard -mfloat-abi=hard  )
+    add_compile_options( ${FLAG_mfpu_neon} ${FLAG_mfloat_abi_hard} )
+  endif()
+
+  if( VVDEC_TARGET_ARCH STREQUAL "LOONGARCH64" )
+    if( VVDEC_ENABLE_LOONGARCH64_LSX_SIMD )
+      set_if_compiler_supports_flag( FLAG_mlsx -mlsx )
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLAG_mlsx}")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG_mlsx}")
+      message( STATUS "LoongArch64 lsx intrinsics enabled" )
+    else()
+      message( STATUS "LoongArch64 lsx intrinsics disabled" )
+    endif()
+  endif()
 endif()
 
 if( VVDEC_ENABLE_ARM_SIMD )
   message( STATUS "ARM SIMD intrinsics enabled" )
   add_compile_definitions( TARGET_SIMD_ARM )
+
+  set_if_compiler_supports_flag( FLAG_mfpu_neon -mfpu=neon  )
+  set_if_compiler_supports_flag( FLAG_mfloat_abi_hard -mfloat-abi=hard  )
+  add_compile_options( ${FLAG_mfpu_neon} ${FLAG_mfloat_abi_hard} )
 endif()
 
 if( VVDEC_TARGET_ARCH STREQUAL "WASM" )
@@ -136,8 +117,8 @@ if( VVDEC_TARGET_ARCH STREQUAL "WASM" )
 endif()
 
 # set common warning flags
-add_compile_options( "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Wall;-Wno-unused-function;-Wno-enum-compare-switch;-Wno-unknown-attributes>" )
-add_compile_options( "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wno-unused-function;-Wno-sign-compare;-fdiagnostics-show-option;-Wno-ignored-attributes>" )
+add_compile_options( "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Wall;-Wno-unused-function;-Wno-enum-compare-switch;-Wno-unknown-attributes;-pedantic;-Wno-error=pedantic;-Wno-c++2a-extensions>" )
+add_compile_options( "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wno-unused-function;-Wno-sign-compare;-fdiagnostics-show-option;-Wno-ignored-attributes;-pedantic;-Wno-error=pedantic>" )
 add_compile_options( "$<$<CXX_COMPILER_ID:MSVC>:/W4;/wd4100;/wd4127;/wd4244;/wd4245;/wd4389;/wd4456;/wd4457;/wd4458;/wd4459;/wd4505;/wd4701;/wd4702;/wd4703>" )
 
 
@@ -168,12 +149,16 @@ set( VVDEC_ENABLE_LOCAL_BITSTREAM_DOWNLOAD  OFF CACHE BOOL   "Enable or disable 
 # also install the test executable vvdecapp instead of the libraries and headers only
 set( VVDEC_INSTALL_VVDECAPP                 OFF CACHE BOOL   "Enable or disable installing the test vvdecapp" )
 
+set( VVDEC_LIBRARY_ONLY                     OFF CACHE BOOL   "Build libvvdec only (no vvdecapp)" )
+
+set( BUILD_SHARED_LIBS                      OFF CACHE BOOL   "Build libvvdec as a shared library" )
+
 # enable postfix
 set( VVDEC_ENABLE_BUILD_TYPE_POSTFIX        OFF CACHE BOOL   "Enable or disable build type postfix for apps and libs" )
 
 set( VVDEC_ENABLE_LINK_TIME_OPT             ON  CACHE BOOL   "Enable link time optimization for release and profile builds" )
 
-set( VVDEC_ENABLE_WARNINGS_AS_WERROR        ON  CACHE BOOL   "Treat warnings as errors (-Werror or /WX)" )
+set( VVDEC_ENABLE_WERROR                    ON  CACHE BOOL   "Treat warnings as errors (-Werror or /WX)" )
 
 if( CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
@@ -249,6 +234,7 @@ endif()
 
 # set c++14
 set( CMAKE_CXX_STANDARD 14 )
+set( CMAKE_CXX_EXTENSIONS OFF )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 # compile everything position independent (even static libraries)
@@ -296,7 +282,7 @@ if( VVDEC_USE_THREAD_SANITIZER )
   add_link_options( "-fsanitize=thread" )
 endif()
 
-if( VVDEC_ENABLE_WARNINGS_AS_WERROR )
+if( VVDEC_ENABLE_WERROR )
     add_compile_options( "$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror>" )
     add_compile_options( "$<$<CXX_COMPILER_ID:MSVC>:/WX>" )
 endif()
@@ -414,6 +400,10 @@ endif()
 # enable testing with ctest
 enable_testing()
 
+if( VVDEC_LIBRARY_ONLY )
+  message( WARNING "The test suite will not be able to run, when building the vvdec library only (VVDEC_LIBRARY_ONLY=ON)" )
+endif()
+
 function( read_bitstream_yuv_md5 BITSTREAM_FILE OUT_MD5_HASH )
   STRING( REGEX REPLACE "\\.bit$" ".yuv.md5" MD5_FILE ${BITSTREAM_FILE} )
   file( READ ${MD5_FILE} MD5_HASH LIMIT 32 )
@@ -470,7 +460,7 @@ endforeach()
 get_directory_property( ALL_TESTS TESTS )
 set_tests_properties( ${ALL_TESTS} PROPERTIES
                       TIMEOUT 120
-                      FAIL_REGULAR_EXPRESSION "WARNING:" )
+                      FAIL_REGULAR_EXPRESSION "(WARNING:|runtime error)" )
 
 add_custom_target( test-ok  USES_TERMINAL COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIG> -R "\"^(Test|MISSING)\"" )
 add_custom_target( test-all USES_TERMINAL COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIG> -R "\"^(Test|MISSING|Faulty)\"" )

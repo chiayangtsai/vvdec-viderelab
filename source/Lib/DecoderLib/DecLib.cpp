@@ -111,11 +111,7 @@ DecLib::DecLib()
 #endif
 }
 
-#if RPR_YUV_OUTPUT
-void DecLib::create( int numDecThreads, int parserFrameDelay, const UserAllocator& userAllocator, ErrHandlingFlags errHandlingFlags, int upscaledOutput )
-#else
 void DecLib::create( int numDecThreads, int parserFrameDelay, const UserAllocator& userAllocator, ErrHandlingFlags errHandlingFlags )
-#endif
 {
   // run constructor again to ensure all variables, especially in DecLibParser have been reset
   this->~DecLib();
@@ -136,12 +132,8 @@ void DecLib::create( int numDecThreads, int parserFrameDelay, const UserAllocato
   m_parseFrameDelay = parserFrameDelay;
 
   bool upscalingEnabled = false;
-#if RPR_YUV_OUTPUT
-  m_upscaledOutput = upscaledOutput;
-  upscalingEnabled = upscaledOutput;
-#endif
-  m_picListManager.create( m_parseFrameDelay, ( int ) m_decLibRecon.size(), upscalingEnabled, userAllocator );
-  m_decLibParser.create  ( m_decodeThreadPool.get(), m_parseFrameDelay, ( int ) m_decLibRecon.size(), numDecThreads, errHandlingFlags );
+  m_picListManager.create( m_parseFrameDelay, (int) m_decLibRecon.size(), userAllocator );
+  m_decLibParser.create  ( m_decodeThreadPool.get(), m_parseFrameDelay, (int) m_decLibRecon.size(), numDecThreads, errHandlingFlags );
 
   int id=0;
   for( auto &dec: m_decLibRecon )
@@ -458,12 +450,15 @@ void DecLib::checkPictureHashSEI( Picture* pcPic )
   {
     return;
   }
+  if( !pcPic->neededForOutput || pcPic->picCheckedDPH )
+  {
+    return;
+  }
 
   CHECK( pcPic->progress < Picture::reconstructed, "picture not reconstructed" );
 
   seiMessages pictureHashes = SEI_internal::getSeisByType( pcPic->seiMessageList, VVDEC_DECODED_PICTURE_HASH );
-
-  if( !pictureHashes.empty() && !pcPic->picCheckedDPH && pcPic->neededForOutput )
+  if( !pictureHashes.empty() )
   {
     if( pictureHashes.size() > 1 )
     {
@@ -473,11 +468,13 @@ void DecLib::checkPictureHashSEI( Picture* pcPic )
     const vvdecSEIDecodedPictureHash* hash = (vvdecSEIDecodedPictureHash*)pictureHashes.front()->payload;
 
     msg( INFO, "         " );
-    m_numberOfChecksumErrorsDetected += calcAndPrintHashStatus( pcPic->getRecoBuf(), hash, pcPic->cs->sps->getBitDepths(), INFO );
-    pcPic->picCheckedDPH = true;
+    const int hashErrors              = calcAndPrintHashStatus( pcPic->getRecoBuf(), hash, pcPic->cs->sps->getBitDepths(), INFO );
+    m_numberOfChecksumErrorsDetected += hashErrors;
+    pcPic->dphMismatch                = !!hashErrors;
+    pcPic->picCheckedDPH              = true;
     msg( INFO, "\n" );
   }
-  else if( pcPic->neededForOutput )
+  else
   {
     if( pcPic->subPictures.empty() )
     {
@@ -490,7 +487,7 @@ void DecLib::checkPictureHashSEI( Picture* pcPic )
     {
       CHECK( seiIt->payloadType != VVDEC_SCALABLE_NESTING, "expected nesting SEI" );
 
-      const vvdecSEIScalableNesting* nestingSei = (vvdecSEIScalableNesting*)seiIt->payload;
+      const vvdecSEIScalableNesting* nestingSei = (vvdecSEIScalableNesting*) seiIt->payload;
       if( !nestingSei->snSubpicFlag )
       {
         continue;
@@ -503,7 +500,7 @@ void DecLib::checkPictureHashSEI( Picture* pcPic )
         if( nestedSei && nestedSei->payloadType != VVDEC_DECODED_PICTURE_HASH )
           continue;
 
-        const vvdecSEIDecodedPictureHash* hash = (vvdecSEIDecodedPictureHash*)nestedSei->payload;
+        const vvdecSEIDecodedPictureHash* hash = (vvdecSEIDecodedPictureHash*) nestedSei->payload;
 
         if( pcPic->subpicsCheckedDPH.empty() )
         {
@@ -527,8 +524,10 @@ void DecLib::checkPictureHashSEI( Picture* pcPic )
             if( pcPic->subpicsCheckedDPH[subPicIdx] )
               continue;
 
-            const UnitArea area = UnitArea( pcPic->chromaFormat, subPic.getLumaArea() );
-            m_numberOfChecksumErrorsDetected += calcAndPrintHashStatus( pcPic->cs->getRecoBuf( area ), hash, pcPic->cs->sps->getBitDepths(), INFO );
+            const UnitArea area                 = UnitArea( pcPic->chromaFormat, subPic.getLumaArea() );
+            const int      hashErrors           = calcAndPrintHashStatus( pcPic->cs->getRecoBuf( area ), hash, pcPic->cs->sps->getBitDepths(), INFO );
+            m_numberOfChecksumErrorsDetected   += hashErrors;
+            pcPic->dphMismatch                 |= !!hashErrors;
             pcPic->subpicsCheckedDPH[subPicIdx] = true;
             msg( INFO, "\n" );
           }
@@ -536,11 +535,13 @@ void DecLib::checkPictureHashSEI( Picture* pcPic )
       }
     }
 
+    size_t checkedSubpicCount = std::count( pcPic->subpicsCheckedDPH.cbegin(), pcPic->subpicsCheckedDPH.cend(), true );
+    pcPic->picCheckedDPH      = ( checkedSubpicCount == pcPic->subPictures.size() );   // mark when all subpics have been checked
+
     if( m_parseFrameDelay )
     {
       // this warning is only enabled, when running with parse delay enabled, because otherwise we don't know here if the last DPH Suffix-SEI has already been
       // parsed
-      auto checkedSubpicCount = std::count( pcPic->subpicsCheckedDPH.cbegin(), pcPic->subpicsCheckedDPH.cend(), true );
       if( checkedSubpicCount != pcPic->subPictures.size() )
       {
         msg( WARNING, "Warning: missing decoded picture hash SEI message for SubPics (%u/%u).\n", checkedSubpicCount, pcPic->subPictures.size() );

@@ -144,6 +144,8 @@ public:
   uint32_t getNaluBits()                      const { return bits; }
   bool     getRap()                           const { return rap; }
 
+  bool     isCLVSS()                          const { return !slices.empty() && slices[0]->isClvssPu(); }
+
   Pel*   getOrigin( const PictureType &type, const ComponentID compID ) const;
   PelBuf getOriginBuf( const PictureType &type, const ComponentID compID );
 
@@ -204,6 +206,7 @@ public:
 
   bool              picCheckedDPH = false;
   std::vector<bool> subpicsCheckedDPH;
+  bool              dphMismatch   = false;
 
   // As long as this field is true, the picture will not be reused or deleted.
   // An external application needs to call DecLib::releasePicture(), when it is done using the picture buffer.
