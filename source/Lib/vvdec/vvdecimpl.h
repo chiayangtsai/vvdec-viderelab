@@ -45,6 +45,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "vvdec/vvdec.h"
 #include "DecoderLib/DecLib.h"             // internal decoder
 
+#include <viderelab/common/json.hpp>
+
 namespace vvdec {
 
 class FilmGrain;
@@ -146,6 +148,7 @@ public:
   void setLoggingCallback( vvdecLoggingCallback callback );
 
   int decode( vvdecAccessUnit& accessUnit, vvdecFrame** ppframe );
+  int printPicStructure(viderelab::json::Dict &prnFrame, const vvdecFrame *frame) const;
 
   int flush( vvdecFrame** ppcFrame );
 
@@ -169,7 +172,7 @@ public:
   static const char* getNalUnitTypeAsString( vvdecNalType t );
   static bool isNalUnitSlice               ( vvdecNalType t );
 
-  std::string                             m_cErrorString;
+  mutable std::string                     m_cErrorString;
   std::string                             m_cAdditionalErrorString;
 
 private:

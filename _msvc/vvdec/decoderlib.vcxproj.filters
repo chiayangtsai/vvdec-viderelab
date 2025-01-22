@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{1d285d56-2a0f-494a-9b9b-17966cd42486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{436f68c2-5f1d-4817-aebd-ec9a4276fb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\decoderlib">
+      <UniqueIdentifier>{1ae6ad16-d745-426a-a3e5-c2f4df63304f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\AnnexBread.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\BinDecoder.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\CABACReader.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\DecCu.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\DecLib.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\DecLibParser.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\DecLibRecon.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\DecSlice.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\HLSyntaxReader.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\NALread.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\SEIread.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\DecoderLib\VLCReader.cpp">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\AnnexBread.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\BinDecoder.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\CABACReader.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\DecCu.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\DecLib.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\DecLibParser.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\DecLibRecon.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\DecSlice.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\HLSyntaxReader.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\NALread.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\SEIread.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\DecoderLib\VLCReader.h">
+      <Filter>source\lib\decoderlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

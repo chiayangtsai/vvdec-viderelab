@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{f8f61745-4d30-4af3-b81e-17256f30b7cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{4c03b831-8f1b-41a1-97b8-1ee8bee754fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\utilities">
+      <UniqueIdentifier>{9978b3eb-43d7-4909-8627-61d1f73d7e3d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Lib\Utilities\ThreadPool.cpp">
+      <Filter>source\lib\utilities</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Lib\Utilities\ThreadPool.h">
+      <Filter>source\lib\utilities</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

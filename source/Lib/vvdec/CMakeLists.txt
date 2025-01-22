@@ -12,10 +12,15 @@ else()
 endif()
 
 # get source files
-file( GLOB BASE_SRC_FILES "*.cpp"  "../CommonLib/*.cpp"  "../Utilities/*.cpp" "../DecoderLib/*.cpp")
+file( GLOB BASE_SRC_FILES "*.cpp"
+      "../CommonLib/*.cpp"
+      "../Utilities/*.cpp"
+      "../DecoderLib/*.cpp"
+      "../../../viderelab/common/src/*.cpp"
+      "../../../viderelab/demuxers/src/*.cpp" )
 
 # get include files
-file( GLOB BASE_INC_FILES "*.h" "../CommonLib/*.h"  "../Utilities/*.h" "../DecoderLib/*.h" )
+file( GLOB BASE_INC_FILES "*.h" "../CommonLib/*.h"  "../Utilities/*.h" "../DecoderLib/*.h")
 
 
 if( NOT DEFINED VVDEC_ENABLE_X86_SIMD )
@@ -47,10 +52,12 @@ file( GLOB MD5_INC_FILES "../libmd5/*.h" )
 file( GLOB FGS_SRC_FILES "../FilmGrain/FilmGrain.cpp" "../FilmGrain/FilmGrainImpl.cpp" )
 file( GLOB FGS_INC_FILES "../FilmGrain/FilmGrain.h"   "../FilmGrain/FilmGrainImpl.h"   )
 
+
 file( GLOB FGS_X86_SSE41_SRC_FILES "../FilmGrain/*_sse41.cpp" )
 file( GLOB FGS_X86_AVX2_SRC_FILES  "../FilmGrain/*_avx2.cpp"  )
 list( APPEND X86_SSE41_SRC_FILES ${FGS_X86_SSE41_SRC_FILES} )
 list( APPEND X86_AVX2_SRC_FILES  ${FGS_X86_AVX2_SRC_FILES}  )
+
 
 # get public/extern include files
 file( GLOB PUBLIC_INC_FILES  "../../../include/${LIB_NAME}/*.h" )
@@ -78,7 +85,7 @@ add_compile_definitions( ${LIB_NAME_UC}_SOURCE )
 
 # set PRIVATE include directories for all targets in this directory
 include_directories( $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../include> $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> )
-include_directories( . .. ../DecoderLib ../CommonLib ../CommonLib/x86 ../CommonLib/arm ../libmd5 )
+include_directories( . .. ../DecoderLib ../CommonLib ../CommonLib/x86 ../CommonLib/arm ../libmd5 ../../..)
 include_directories( SYSTEM ../../../thirdparty )
 
 # don't export all symbols from shared libraries by default (gcc: -fvisibility=hidden), only those marked as VVDEC_DECL
