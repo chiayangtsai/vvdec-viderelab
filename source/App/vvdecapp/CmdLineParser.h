@@ -238,6 +238,8 @@ namespace vvdecoderapp
                            vvdecParams &rcParams,
                            std::string &rcBitstreamFile,
                            std::string &rcOutputFile,
+                           std::string& rcStructureFile,
+                           std::string& rcReferenceFile,                           
                            int &riFrames,
                            int &riLoops,
                            std::string &rcExpectYuvMD5,

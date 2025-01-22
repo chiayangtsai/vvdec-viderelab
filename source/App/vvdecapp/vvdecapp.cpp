@@ -95,6 +95,8 @@ static bool handle_frame(vvdecFrame *pcFrame,
                          int iPrintPicHash,
                          unsigned int &uiFrames,
                          unsigned int &uiFramesTmp,
+                         std::optional<viderelab::json::Dict>& frameStructure,
+                         viderelab::YUVDemuxer * const yuv,                         
                          vvdecLogLevel logLevel,
                          std::ostream *logStream,
                          std::ostream *outStream,
@@ -480,6 +482,8 @@ int main(int argc, char *argv[])
 
   std::string cBitstreamFile = "";
   std::string cOutputFile = "";
+  std::string cStructureFile = "";
+  std::string cReferenceFile = "";  
   int iMaxFrames = -1;
   int iLoopCount = 1;
 
@@ -507,7 +511,8 @@ int main(int argc, char *argv[])
   {
     vvdecoderapp::CmdLineParser cmdLineParser;
 
-    iRet = cmdLineParser.parse_command_line(argc, argv, params, cBitstreamFile, cOutputFile, iMaxFrames, iLoopCount, cExpectedYuvMD5, appOutputParams, externAllocator, sTracingFile, sTracingRule, iPrintPicHash);
+    iRet = cmdLineParser.parse_command_line(argc, argv, params, cBitstreamFile, cOutputFile, cStructureFile, cReferenceFile, iMaxFrames, iLoopCount, cExpectedYuvMD5, appOutputParams, externAllocator, sTracingFile, sTracingRule, iPrintPicHash);
+
   }
   catch (std::exception &)
   {
@@ -568,8 +573,15 @@ int main(int argc, char *argv[])
   std::unique_ptr<std::ifstream> yuvFile{cReferenceFile.empty() ? nullptr : std::make_unique<std::ifstream>(cReferenceFile.c_str(), std::fstream::binary | std::fstream::in)};
   viderelab::YUVDemuxer::Parameters yuvParams{
       .format{
+#if MACOS_C20_WORKAROUND
+          .colorFormat= viderelab::eColorFormat::I420,
+          .dim{.width= 1280u, .height= 720u}
+#else
           .colorFormat{viderelab::eColorFormat::I420},
-          .dim{.width{1280u}, .height{720u}}}};
+          .dim{.width{1280u}, .height{720u}}
+#endif
+      }
+  };
   auto yuvDemuxer{viderelab::YUVDemuxer::Create(yuvParams, std::move(yuvFile))};
 
   // open output file
@@ -1076,6 +1088,8 @@ static bool handle_frame(vvdecFrame *pcFrame,
                          int iPrintPicHash,
                          unsigned int &uiFrames,
                          unsigned int &uiFramesTmp,
+                         std::optional<viderelab::json::Dict>& frameStructure,
+                         viderelab::YUVDemuxer * const yuv,                          
                          vvdecLogLevel logLevel,
                          std::ostream *logStream,
                          std::ostream *outStream,

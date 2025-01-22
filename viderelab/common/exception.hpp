@@ -39,7 +39,11 @@ private:
     std::string FormatExceptionMessage(std::string_view msg, Args&&... args)
     {
         try {
+#if MACOS_C20_WORKAROUND
+            return "MACOS_C20_WORKAROUND(FormatExceptionMessage try)";
+#else
             return std::vformat(msg, std::make_format_args(args...));
+#endif
         } catch (const std::exception& e) {
             return std::format("FormatExceptionMessage: {}\nException message: {}.", e.what(), msg);
         }

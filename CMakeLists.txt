@@ -255,6 +255,12 @@ if( WIN32 )
   add_definitions( -D_WIN32_WINNT=0x0600 )
 endif()
 
+if ( APPLE )
+  message(STATUS "C++20 Workaround: Configuring for macOS")
+  add_definitions(-DMACOS_C20_WORKAROUND=1)
+endif()
+
+
 # enable parallel build for Visual Studio
 if( MSVC )
   # add compile options

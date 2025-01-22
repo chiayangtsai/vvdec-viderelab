@@ -59,8 +59,13 @@ ptrdiff_t GetYUV420PlaneStride(const IMAGE_FORMAT &imageFormat, const ptrdiff_t 
 
 const std::array<IMAGE_DESC, 9u> Descriptions{{
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::I420,
+        .numPlanes= 3u,
+#else
         .colorFormat{eColorFormat::I420},
         .numPlanes{3u},
+#endif
         .GetImageSize{GetYUV420ImageSize},
         .GetImageStride{GetYUV420ImageStride},
         .GetPlaneFormat{GetYUV420PlaneFormat},
@@ -68,8 +73,13 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
         .GetPlaneStride{GetYUV420PlaneStride}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::NV12,
+        .numPlanes= 2u,
+#else
         .colorFormat{eColorFormat::NV12},
         .numPlanes{2u},
+#endif
         .GetImageSize{GetYUV420ImageSize},
         .GetImageStride{GetYUV420ImageStride},
         .GetPlaneFormat{[](const IMAGE_FORMAT &imageFormat, const size_t planeIdx) -> IMAGE_FORMAT {
@@ -92,8 +102,14 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
             }}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::UYVY,
+        .numPlanes= 1u,
+
+#else
         .colorFormat{eColorFormat::UYVY},
         .numPlanes{1u},
+#endif
         .GetImageSize{[](const IMAGE_FORMAT &imageFormat, const uint32_t log2align) -> size_t {
             return AlignValue<size_t>(imageFormat.dim.width * 2u, log2align) * imageFormat.dim.height;
             }},
@@ -114,8 +130,14 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
             }}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::YUV400,
+        .numPlanes= 1u,
+
+#else
         .colorFormat{eColorFormat::YUV400},
         .numPlanes{1u},
+#endif
         .GetImageSize{[](const IMAGE_FORMAT &imageFormat, const uint32_t log2align) -> size_t {
             return AlignValue<size_t>(imageFormat.dim.width, log2align) * imageFormat.dim.height;
             }},
@@ -136,8 +158,14 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
             }}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::YUV420,
+        .numPlanes= 3u,
+
+#else
         .colorFormat{eColorFormat::YUV420},
         .numPlanes{3u},
+#endif
         .GetImageSize{GetYUV420ImageSize},
         .GetImageStride{GetYUV420ImageStride},
         .GetPlaneFormat{GetYUV420PlaneFormat},
@@ -145,8 +173,14 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
         .GetPlaneStride{GetYUV420PlaneStride}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::YUV422,
+        .numPlanes=3u,
+
+#else
         .colorFormat{eColorFormat::YUV422},
         .numPlanes{3u},
+#endif
         .GetImageSize{[](const IMAGE_FORMAT &imageFormat, const uint32_t log2align) -> size_t {
             const size_t pitchY{AlignValue<size_t>(imageFormat.dim.width, log2align)};
             return pitchY * imageFormat.dim.height + pitchY * imageFormat.dim.height / 2u;
@@ -174,8 +208,13 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
             }}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::YUV444,
+        .numPlanes= 3u,
+#else
         .colorFormat{eColorFormat::YUV444},
         .numPlanes{3u},
+#endif
         .GetImageSize{[](const IMAGE_FORMAT &imageFormat, const uint32_t log2align) -> size_t {
             return AlignValue<size_t>(imageFormat.dim.width, log2align) * imageFormat.dim.height * 3u;
             }},
@@ -198,8 +237,13 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
             }}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::YUY2,
+        .numPlanes= 1u,
+#else
         .colorFormat{eColorFormat::YUY2},
         .numPlanes{1u},
+#endif
         .GetImageSize{[](const IMAGE_FORMAT &imageFormat, const uint32_t log2align) -> size_t {
             return AlignValue<size_t>(imageFormat.dim.width * 2u, log2align) * imageFormat.dim.height;
             }},
@@ -220,8 +264,13 @@ const std::array<IMAGE_DESC, 9u> Descriptions{{
             }}
     },
     {
+#if MACOS_C20_WORKAROUND
+        .colorFormat= eColorFormat::YV12,
+        .numPlanes= 3u,
+#else
         .colorFormat{eColorFormat::YV12},
         .numPlanes{3u},
+#endif
         .GetImageSize{GetYUV420ImageSize},
         .GetImageStride{GetYUV420ImageStride},
         .GetPlaneFormat{GetYUV420PlaneFormat},
