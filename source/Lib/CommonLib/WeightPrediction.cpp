@@ -74,8 +74,8 @@ namespace vvdec
     const bool bBiPred = (iRefIdx0 >= 0 && iRefIdx1 >= 0);
     const bool bUniPred = !bBiPred;
 
-    const WPScalingParam *wp0org;
-    const WPScalingParam *wp1org;
+    const WPScalingParam *wp0org{nullptr};
+    const WPScalingParam *wp1org{nullptr};
 
     if (bUniPred || wpBiPred)
     {

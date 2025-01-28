@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{deb7b8e9-f7c1-4f77-a433-8a071b88e422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{dd161740-adcf-487a-98d9-a1623701c278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\filmgrain">
+      <UniqueIdentifier>{58510690-8d31-4041-941d-b617a76165de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Lib\FilmGrain\FilmGrain.cpp">
+      <Filter>source\lib\filmgrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lib\FilmGrain\FilmGrainImpl.cpp">
+      <Filter>source\lib\filmgrain</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Lib\FilmGrain\FilmGrain.h">
+      <Filter>source\lib\filmgrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lib\FilmGrain\FilmGrainImpl.h">
+      <Filter>source\lib\filmgrain</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

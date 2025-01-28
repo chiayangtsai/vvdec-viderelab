@@ -95,11 +95,8 @@ std::string IntraPredModeToString(const int8_t intraPredMode)
 
 void PrintPictureProperties(viderelab::json::Dict &prn, const vvdecFrame& frame, const Picture& picture)
 {
-    {
-        auto prnDim{prn.StartDict("dimension")};
-        prnDim.AddValue("width", picture.cs->pcv->lumaWidth);
-        prnDim.AddValue("height", picture.cs->pcv->lumaHeight);
-    }
+    prn.AddValue("width", picture.cs->pcv->lumaWidth);
+    prn.AddValue("height", picture.cs->pcv->lumaHeight);
     prn.AddValue("chromaFormat", ChromaFormatToString(picture.cs->pcv->chrFormat));
     prn.AddValue("bitDepth", picture.cs->sps->getBitDepth());
 }
@@ -111,17 +108,10 @@ void PrintTU(viderelab::json::Dict &prn, const TransformUnit &tu)
 void PrintCU(viderelab::json::Dict &prn, const CodingUnit &cu)
 {
     prn.AddValue("cu_id", cu.idx - 1);
-    {
-        auto prnPos{prn.StartDict("cu_pos")};
-        prnPos.AddValue("x", cu.lumaPos().x);
-        prnPos.AddValue("y", cu.lumaPos().y);
-    }
-
-    {
-        auto prnSize{prn.StartDict("cu_size")};
-        prnSize.AddValue("width", cu.lwidth());
-        prnSize.AddValue("height", cu.lheight());
-    }
+    prn.AddValue("x", cu.lumaPos().x);
+    prn.AddValue("y", cu.lumaPos().y);
+    prn.AddValue("width", cu.lwidth());
+    prn.AddValue("height", cu.lheight());
 
     prn.AddValue("cu_qp", (uint32_t) cu.qp);
     prn.AddValue("pred_mode", (cu.predMode() == MODE_INTRA) ? "intra" : "inter");
@@ -131,16 +121,10 @@ void PrintCU(viderelab::json::Dict &prn, const CodingUnit &cu)
         auto prnPUs{prn.StartArray("pu-info")};
         auto pu{prnPUs.StartDict()};
         pu.AddValue("pu_id", 0u);
-        {
-            auto prnPos{pu.StartDict("pu_pos")};
-            prnPos.AddValue("x", cu.lumaPos().x);
-            prnPos.AddValue("y", cu.lumaPos().y);
-        }
-        {
-            auto prnSize{pu.StartDict("pu_size")};
-            prnSize.AddValue("width", cu.lwidth());
-            prnSize.AddValue("height", cu.lheight());
-        }
+        pu.AddValue("x", cu.lumaPos().x);
+        pu.AddValue("y", cu.lumaPos().y);
+        pu.AddValue("width", cu.lwidth());
+        pu.AddValue("height", cu.lheight());
         pu.AddValue("pu_mode", static_cast<uint32_t>(cu.intraDir[CHANNEL_TYPE_LUMA]));
     }
 }
@@ -150,17 +134,10 @@ void PrintCTU(viderelab::json::Dict &prn, const CtuData& ctu)
     prn.AddValue("ctu_id", ctu.ctuIdx);
 
     const auto ctuSize{ctu.sps->getCTUSize()};
-    {
-        auto prnCTUPos{prn.StartDict("ctu_pos")};
-        prnCTUPos.AddValue("x", ctu.colIdx * ctuSize);
-        prnCTUPos.AddValue("y", ctu.lineIdx * ctuSize);
-    }
-
-    {
-        auto prnCTUSize{prn.StartDict("ctu_size")};
-        prnCTUSize.AddValue("width", ctuSize);
-        prnCTUSize.AddValue("height", ctuSize);
-    }
+    prn.AddValue("x", ctu.colIdx * ctuSize);
+    prn.AddValue("y", ctu.lineIdx * ctuSize);
+    prn.AddValue("width", ctuSize);
+    prn.AddValue("height", ctuSize);
 
     //prn.AddValue("ctu_qp",
     //prn.AddValue("cu_split_flags",
@@ -201,10 +178,7 @@ void PrintPicture(viderelab::json::Dict &prn, const vvdecFrame& frame, const Pic
 {
     prn.AddValue("frame_index", frame.sequenceNumber);
     prn.AddValue("poc", picture.getPOC());
-    {
-        auto prnProps{prn.StartDict("properties")};
-        PrintPictureProperties(prnProps, frame, picture);
-    }
+    PrintPictureProperties(prn, frame, picture);
 
     PrintPictureHeader(prn, frame, picture);
 
