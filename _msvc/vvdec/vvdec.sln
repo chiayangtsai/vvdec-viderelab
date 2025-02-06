@@ -22,9 +22,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vvdec", "vvdec.vcxproj", "{
 	ProjectSection(ProjectDependencies) = postProject
 		{2958CE94-5B40-4F81-B1F5-C0D4DE18903D} = {2958CE94-5B40-4F81-B1F5-C0D4DE18903D}
 		{5594F381-6FC7-48B2-991A-2D99A28A987E} = {5594F381-6FC7-48B2-991A-2D99A28A987E}
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D} = {C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utilities", "utilities.vcxproj", "{B94B6843-CA0E-4587-A0F0-1825220039F9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmgrain", "filmgrain.vcxproj", "{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +77,14 @@ Global
 		{B94B6843-CA0E-4587-A0F0-1825220039F9}.Release|x64.Build.0 = Release|x64
 		{B94B6843-CA0E-4587-A0F0-1825220039F9}.Release|x86.ActiveCfg = Release|Win32
 		{B94B6843-CA0E-4587-A0F0-1825220039F9}.Release|x86.Build.0 = Release|Win32
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Debug|x64.ActiveCfg = Debug|x64
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Debug|x64.Build.0 = Debug|x64
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Debug|x86.ActiveCfg = Debug|Win32
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Debug|x86.Build.0 = Debug|Win32
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Release|x64.ActiveCfg = Release|x64
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Release|x64.Build.0 = Release|x64
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Release|x86.ActiveCfg = Release|Win32
+		{C2E6C55D-EB0F-43A6-813D-45D8FED6C47D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
