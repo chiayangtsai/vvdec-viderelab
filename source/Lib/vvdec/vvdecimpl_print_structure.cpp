@@ -105,6 +105,11 @@ void PrintTU(viderelab::json::Dict &prn, const TransformUnit &tu)
 {
 }
 
+bool IsZeroCU(const CodingUnit &cu)
+{
+    return (0 == cu.lwidth()) || (0 == cu.lheight());
+}
+
 void PrintCU(viderelab::json::Dict &prn, const CodingUnit &cu)
 {
     prn.AddValue("cu_id", cu.idx - 1);
@@ -145,6 +150,9 @@ void PrintCTU(viderelab::json::Dict &prn, const CtuData& ctu)
     auto prnCUs{prn.StartArray("cu-info")};
 
     for (auto cu{ctu.firstCU}; cu != nullptr; cu = cu->next) {
+        if (IsZeroCU(*cu)) {
+            continue;
+        }
         auto prnCU{prnCUs.StartDict()};
         PrintCU(prnCU, *cu);
     }
