@@ -97,8 +97,6 @@ void PrintPictureProperties(viderelab::json::Dict &prn, const vvdecFrame& frame,
 {
     prn.AddValue("width", picture.cs->pcv->lumaWidth);
     prn.AddValue("height", picture.cs->pcv->lumaHeight);
-    prn.AddValue("chromaFormat", ChromaFormatToString(picture.cs->pcv->chrFormat));
-    prn.AddValue("bitDepth", picture.cs->sps->getBitDepth());
 }
 
 void PrintTU(viderelab::json::Dict &prn, const TransformUnit &tu)
