@@ -8,88 +8,69 @@ bool IsZeroCU(const vvdec::CodingUnit &cu)
     return (0 == cu.lwidth()) || (0 == cu.lheight());
 }
 
-void PrintCU(viderelab::json::Dict &prn, const vvdec::CodingUnit &cu)
+void PrintCU(viderelab::json::Array &GUs, const vvdec::CodingUnit &cu, const vvdec::Picture& picture)
 {
-    prn.insert("cu_id", cu.idx - 1);
-    prn.insert("x", cu.lumaPos().x);
-    prn.insert("y", cu.lumaPos().y);
-    prn.insert("width", cu.lwidth());
-    prn.insert("height", cu.lheight());
+    const auto lumaSize{picture.lumaSize()};
+    if ((cu.lumaPos().x >= lumaSize.width) || (cu.lumaPos().y >= lumaSize.height)) {
+        return;
+    }
 
-    prn.insert("cu_qp", (uint32_t) cu.qp);
-    prn.insert("pred_mode", (cu.predMode() == vvdec::MODE_INTER) ? "inter" : "intra");
-
-    if (cu.predMode() == vvdec::MODE_INTER) {
-        std::cout << "inter cu\n";
-    } else {
-        prn.insert("num_pus", 1u);
-        viderelab::json::Array prnPUs;
-        prn.insert("pu-info", prnPUs);
-        viderelab::json::Dict pu;
-        prnPUs.push_back(pu);
-        pu.insert("pu_id", 0u);
-        pu.insert("x", cu.lumaPos().x);
-        pu.insert("y", cu.lumaPos().y);
-        pu.insert("width", cu.lwidth());
-        pu.insert("height", cu.lheight());
+    const auto guPicOffsetX{cu.lumaPos().x / 4u};
+    const auto guPicOffsetY{cu.lumaPos().y / 4u};
+    const auto predMode{(cu.predMode() == vvdec::MODE_INTER) ? "inter" :
+        ((cu.predMode() == vvdec::MODE_INTRA) ? "intra" : "ibc")};
+    const auto puMode{[&](){
         if (cu.predMode() == vvdec::MODE_INTRA) {
-            pu.insert("pu_mode", static_cast<uint32_t>(cu.intraDir[vvdec::CHANNEL_TYPE_LUMA]));
+            return std::to_string(cu.intraDir[vvdec::CHANNEL_TYPE_LUMA]);
+        } else if (cu.predMode() == vvdec::MODE_IBC) {
+            return std::string("ibc");
         } else {
-            pu.insert("pu_mode", "ibc");
+            return std::string("inter");
+        }
+    }()};
+
+    for (size_t guY{0u}; guY < cu.lumaSize().height / 4u; ++guY) {
+        for (size_t guX{0u}; guX < cu.lumaSize().width / 4u; ++guX) {
+            viderelab::json::Dict gu;
+            GUs.push_back(gu);
+
+            gu.insert("gu_x_idx_pic", guX + guPicOffsetX);
+            gu.insert("gu_y_idx_pic", guY + guPicOffsetY);
+            gu.insert("gu_x_idx_pu", guX);
+            gu.insert("gu_y_idx_pu", guY);
+            gu.insert("num_gu_pu_width", cu.lumaSize().width / 4u);
+            gu.insert("num_gu_pu_height", cu.lumaSize().height / 4u);
+            gu.insert("qp", cu.qp);
+            gu.insert("pred_mode", predMode);
+            gu.insert("pu_mode", puMode);
         }
     }
 }
 
-void PrintCTU(viderelab::json::Dict &prn, const vvdec::CtuData& ctu)
+void PrintCTU(viderelab::json::Array &GUs, const vvdec::CtuData& ctu, const vvdec::Picture& picture)
 {
-    prn.insert("ctu_id", ctu.ctuIdx);
-
-    const auto ctuSize{ctu.sps->getCTUSize()};
-    prn.insert("x", ctu.colIdx * ctuSize);
-    prn.insert("y", ctu.lineIdx * ctuSize);
-    prn.insert("width", ctuSize);
-    prn.insert("height", ctuSize);
-
-    prn.insert("num_cus", ctu.numCUs);
-    viderelab::json::Array prnCUs;
-    prn.insert("cu-info", prnCUs);
-
     for (auto cu{ctu.firstCU}; cu != nullptr; cu = cu->next) {
         if (IsZeroCU(*cu)) {
             continue;
         }
-        viderelab::json::Dict prnCU;
-        prnCUs.push_back(prnCU);
-        PrintCU(prnCU, *cu);
+        PrintCU(GUs, *cu, picture);
     }
 }
 
 void PrintPictureHeader(viderelab::json::Dict &prn, const vvdec::Picture& picture)
 {
-    prn.insert("num_slices", picture.slices.size());
-
-    viderelab::json::Array prnSlices;
-    prn.insert("slice-info", prnSlices);
+    viderelab::json::Array GUs;
+    prn.insert("gu-info", GUs);
 
     for (const auto &slice : picture.slices) {
-        viderelab::json::Dict prnSlice;
-        prnSlices.push_back(prnSlice);
-
-        prnSlice.insert("slice_qp", slice->getSliceQp());
         const auto numCTUs{slice->getNumCtuInSlice()};
-        prnSlice.insert("num_ctus", numCTUs);
-
-        viderelab::json::Array prnCTUs;
-        prnSlice.insert("ctu-info", prnCTUs);
 
         for (size_t ctuIdx{0u}; ctuIdx < numCTUs; ++ctuIdx) {
-            viderelab::json::Dict prnCTU;
-            prnCTUs.push_back(prnCTU);
 
             auto ctu_id{slice->getCtuAddrInSlice(ctuIdx)};
             const auto &ctu{picture.cs->getCtuData(ctu_id)};
 
-            PrintCTU(prnCTU, ctu);
+            PrintCTU(GUs, ctu, picture);
         }
     }
 }
