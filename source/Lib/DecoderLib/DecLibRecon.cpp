@@ -407,7 +407,7 @@ void DecLibRecon::swapBufs( CodingStructure& cs )
   cs.rebindPicBufs();   // ensure the recon buf in the coding structure points to the correct buffer
 }
 
-void DecLibRecon::decompressPicture( Picture* pcPic )
+void DecLibRecon::decompressPicture( Picture* pcPic, std::shared_ptr<viderelab::json::Array> framesStructure )
 {
   m_currDecompPic = pcPic;
 
@@ -620,6 +620,13 @@ void DecLibRecon::decompressPicture( Picture* pcPic )
                                                           ctuTask<true> );
       }
     }
+  }
+
+  if (framesStructure) {
+      viderelab::json::Dict pic;
+      framesStructure->push_back(pic);
+
+    Picture::printStructure(pic, *pcPic);
   }
 
   {

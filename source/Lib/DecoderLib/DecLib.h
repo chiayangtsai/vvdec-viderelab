@@ -90,6 +90,11 @@ public:
   void create( int numDecThreads, int parserFrameDelay, const UserAllocator& userAllocator, ErrHandlingFlags errHandlingFlags);
   void destroy();
 
+  void setFramesStructure(std::shared_ptr<viderelab::json::Array> framesStructure)
+  {
+      m_framesStructure = framesStructure;
+  }
+
   const char* getDecoderCapabilities() const { return m_sDecoderCapabilities.c_str(); }
 
   void     setMaxTemporalLayer( int layer ) { m_iMaxTemporalLayer = layer; }
@@ -122,6 +127,8 @@ private:
   Picture* getNextOutputPic ( bool bFlush = false );
   void     blockAndFinishPictures( Picture* pcPic = nullptr );   // iterate over DecLibRecon instances and wait to finish picture(s)
   void     xCheckNalUnitConstraintFlags( const ConstraintInfo *cInfo, uint32_t naluType );
+
+  std::shared_ptr<viderelab::json::Array> m_framesStructure;
 };
 
 }

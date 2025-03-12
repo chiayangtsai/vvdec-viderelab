@@ -275,6 +275,18 @@ VVDEC_DECL int vvdec_set_logging_callback(vvdecDecoder* dec, vvdecLoggingCallbac
   return VVDEC_OK;
 }
 
+VVDEC_DECL int vvdec_set_frames_structure(vvdecDecoder *dec, std::shared_ptr<viderelab::json::Array> framesStructure)
+{
+  auto d = (vvdec::VVDecImpl*)dec;
+  if (!d)
+  {
+    return VVDEC_ERR_INITIALIZE;
+  }
+
+  d->setFramesStructure(framesStructure);
+
+  return VVDEC_OK;
+}
 
 VVDEC_DECL int vvdec_decode( vvdecDecoder *dec, vvdecAccessUnit* accessUnit, vvdecFrame** frame )
 {
@@ -292,17 +304,6 @@ VVDEC_DECL int vvdec_decode( vvdecDecoder *dec, vvdecAccessUnit* accessUnit, vvd
   }
 
   return d->catchExceptions( &vvdec::VVDecImpl::decode, *accessUnit, frame );
-}
-
-VVDEC_DECL int vvdec_print_pic_structure(viderelab::json::Dict &prnFrame, const vvdecDecoder* dec, const vvdecFrame* frame)
-{
-  auto d = (vvdec::VVDecImpl*)dec;
-  if (!d)
-  {
-    return VVDEC_ERR_INITIALIZE;
-  }
-
-  return d->printPicStructure(prnFrame, frame);
 }
 
 VVDEC_DECL int vvdec_flush( vvdecDecoder *dec, vvdecFrame **frame )

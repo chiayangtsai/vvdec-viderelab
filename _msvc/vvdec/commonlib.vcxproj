@@ -36,6 +36,7 @@
     <ClCompile Include="..\..\source\Lib\CommonLib\ParameterSetManager.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\PicListManager.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\Picture.cpp" />
+    <ClCompile Include="..\..\source\Lib\CommonLib\PictureStructure.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\PicYuvMD5.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\Quant.cpp" />
     <ClCompile Include="..\..\source\Lib\CommonLib\RdCost.cpp" />

@@ -184,7 +184,7 @@ public:
   void create( ThreadPool* threadPool, unsigned instanceId, bool upscaleOutputEnabled );
   void destroy();
 
-  void     decompressPicture( Picture* pcPic );
+  void     decompressPicture( Picture* pcPic, std::shared_ptr<viderelab::json::Array> framesStructure );
   Picture* waitForPrevDecompressedPic();
   void     cleanupOnException( std::exception_ptr exception );
   Picture* getCurrPic() const { return m_currDecompPic; }

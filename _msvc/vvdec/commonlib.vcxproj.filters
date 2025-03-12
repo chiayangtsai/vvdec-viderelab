@@ -144,6 +144,9 @@
     <ClCompile Include="..\..\viderelab\demuxers\src\yuv_demuxer.cpp">
       <Filter>viderelab\demuxers\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Lib\CommonLib\PictureStructure.cpp">
+      <Filter>source\lib\commonlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Lib\CommonLib\AdaptiveLoopFilter.h">

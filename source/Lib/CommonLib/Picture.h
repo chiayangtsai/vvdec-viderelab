@@ -58,6 +58,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "vvdec/sei.h"
 
+#include <viderelab/common/json.hpp>
+
 namespace vvdec
 {
 using namespace x86_simd;
@@ -86,6 +88,8 @@ struct Picture : public UnitArea
   void createWrapAroundBuf( const bool isWrapAround, const unsigned _maxCUSize );
   void resetForUse( int _layerId );
   void destroy();
+
+  static void printStructure(viderelab::json::Dict& prn, Picture& pic);
 
          Pel*      getRecoBufPtr   (const ComponentID compID, bool wrap=false)       { return m_bufs[wrap ? PIC_RECON_WRAP : PIC_RECONSTRUCTION].bufs[compID].buf; }
   const  Pel*      getRecoBufPtr   (const ComponentID compID, bool wrap=false) const { return m_bufs[wrap ? PIC_RECON_WRAP : PIC_RECONSTRUCTION].bufs[compID].buf; }

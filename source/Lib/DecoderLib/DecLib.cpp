@@ -587,7 +587,7 @@ void DecLib::reconPicture( Picture* pcPic )
   Picture* donePic = reconInstance->waitForPrevDecompressedPic();
   try
   {
-    reconInstance->decompressPicture( pcPic );
+    reconInstance->decompressPicture( pcPic, m_framesStructure );
   }
   catch( ... )
   {

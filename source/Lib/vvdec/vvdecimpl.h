@@ -145,10 +145,14 @@ public:
   int uninit();
   int reset();
 
+  void setFramesStructure(std::shared_ptr<viderelab::json::Array> framesStructure)
+  {
+      m_cDecLib->setFramesStructure(framesStructure);
+  }
+
   void setLoggingCallback( vvdecLoggingCallback callback );
 
   int decode( vvdecAccessUnit& accessUnit, vvdecFrame** ppframe );
-  int printPicStructure(viderelab::json::Dict &prnFrame, const vvdecFrame *frame) const;
 
   int flush( vvdecFrame** ppcFrame );
 

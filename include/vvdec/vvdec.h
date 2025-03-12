@@ -577,6 +577,8 @@ VVDEC_DECL int vvdec_decoder_close(vvdecDecoder *);
  */
 VVDEC_DECL int vvdec_set_logging_callback(vvdecDecoder*, vvdecLoggingCallback callback );
 
+VVDEC_DECL int vvdec_set_frames_structure(vvdecDecoder *, std::shared_ptr<viderelab::json::Array> framesStructure);
+
 /* vvdec_decode
   This method decodes a compressed image packet (bitstream).
   Compressed image packet are passed to the decoder in decoder order. A picture is returned by filling the assigned Picture struct.
@@ -589,8 +591,6 @@ VVDEC_DECL int vvdec_set_logging_callback(vvdecDecoder*, vvdecLoggingCallback ca
   \pre         The decoder has to be initialized successfully.
 */
 VVDEC_DECL int vvdec_decode( vvdecDecoder *, vvdecAccessUnit *accessUnit, vvdecFrame **frame );
-
-VVDEC_DECL int vvdec_print_pic_structure(viderelab::json::Dict& prnFrame, const vvdecDecoder* dec, const vvdecFrame* frame);
 
 /* vvdec_flush
   This method flushes the decoder.

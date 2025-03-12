@@ -95,8 +95,6 @@ static bool handle_frame(vvdecFrame *pcFrame,
                          int iPrintPicHash,
                          unsigned int &uiFrames,
                          unsigned int &uiFramesTmp,
-                         std::optional<viderelab::json::Dict>& frameStructure,
-                         viderelab::YUVDemuxer * const yuv,                         
                          vvdecLogLevel logLevel,
                          std::ostream *logStream,
                          std::ostream *outStream,
@@ -559,30 +557,13 @@ int main(int argc, char *argv[])
 
   std::unique_ptr<std::ofstream> structureFile{cStructureFile.empty() ? nullptr : std::make_unique<std::ofstream>(cStructureFile.c_str(), std::fstream::binary | std::fstream::out)};
   std::optional<viderelab::json::Dict> streamStructure;
+  std::shared_ptr<viderelab::json::Array> framesStructure;
   if (structureFile)
   {
-    streamStructure.emplace(*structureFile);
-  };
-  std::optional<viderelab::json::Array> framesStructure;
-  if (streamStructure)
-  {
-    streamStructure->StartItem("pic-info");
-    framesStructure.emplace(*streamStructure);
-  };
-
-  std::unique_ptr<std::ifstream> yuvFile{cReferenceFile.empty() ? nullptr : std::make_unique<std::ifstream>(cReferenceFile.c_str(), std::fstream::binary | std::fstream::in)};
-  viderelab::YUVDemuxer::Parameters yuvParams{
-      .format{
-#if MACOS_C20_WORKAROUND
-          .colorFormat= viderelab::eColorFormat::I420,
-          .dim{.width= 1280u, .height= 720u}
-#else
-          .colorFormat{viderelab::eColorFormat::I420},
-          .dim{.width{1280u}, .height{720u}}
-#endif
-      }
-  };
-  auto yuvDemuxer{viderelab::YUVDemuxer::Create(yuvParams, std::move(yuvFile))};
+    streamStructure = viderelab::json::Dict();
+    framesStructure = std::make_shared<viderelab::json::Array>();
+    streamStructure.value().insert("pic-info", *framesStructure);
+  }
 
   // open output file
   std::fstream cRecFile;
@@ -700,6 +681,8 @@ int main(int argc, char *argv[])
     {
       *logStream << vvdec_get_dec_information(dec) << std::endl;
     }
+
+    vvdec_set_frames_structure(dec, framesStructure);
 
     bool bFlushDecoder = false;
 
@@ -838,13 +821,6 @@ int main(int argc, char *argv[])
 
         if (pcFrame && pcFrame->ctsValid)
         {
-          std::optional<viderelab::json::Dict> frameStructure;
-          if (framesStructure)
-          {
-            framesStructure->StartItem();
-            frameStructure.emplace(*framesStructure);
-          };
-
           if (!handle_frame(pcFrame,
                             pcPrevField,
                             prevFrameW,
@@ -855,8 +831,6 @@ int main(int argc, char *argv[])
                             iPrintPicHash,
                             uiFrames,
                             uiFramesTmp,
-                            frameStructure,
-                            yuvDemuxer.get(),
                             params.logLevel,
                             logStream,
                             outStream,
@@ -914,13 +888,6 @@ int main(int argc, char *argv[])
 
       if (pcFrame && pcFrame->ctsValid)
       {
-        std::optional<viderelab::json::Dict> frameStructure;
-        if (framesStructure)
-        {
-          framesStructure->StartItem();
-          frameStructure.emplace(*framesStructure);
-        };
-
         if (!handle_frame(pcFrame,
                           pcPrevField,
                           prevFrameW,
@@ -931,8 +898,6 @@ int main(int argc, char *argv[])
                           iPrintPicHash,
                           uiFrames,
                           uiFramesTmp,
-                          frameStructure,
-                          yuvDemuxer.get(),
                           params.logLevel,
                           logStream,
                           outStream,
@@ -1043,6 +1008,14 @@ int main(int argc, char *argv[])
   // free memory of access unit
   vvdec_accessUnit_free(accessUnit);
 
+  if (structureFile)
+  {
+      viderelab::json::CONTROL ctrl{
+          .tab = 2u,
+          .flags = viderelab::json::eFlags::NONE };
+      *structureFile << streamStructure.value().to_string(0, ctrl) << std::endl;
+  }
+
   // close yuv output file
   if (!cOutputFile.empty())
   {
@@ -1088,8 +1061,6 @@ static bool handle_frame(vvdecFrame *pcFrame,
                          int iPrintPicHash,
                          unsigned int &uiFrames,
                          unsigned int &uiFramesTmp,
-                         std::optional<viderelab::json::Dict>& frameStructure,
-                         viderelab::YUVDemuxer * const yuv,                          
                          vvdecLogLevel logLevel,
                          std::ostream *logStream,
                          std::ostream *outStream,
@@ -1175,16 +1146,6 @@ static bool handle_frame(vvdecFrame *pcFrame,
   if (logLevel == VVDEC_DETAILS)
   {
     printSEI(dec, pcFrame, logStream);
-  }
-
-  if (yuv)
-  {
-    auto image{yuv->ReadFrame()};
-  }
-
-  if (frameStructure)
-  {
-    vvdec_print_pic_structure(frameStructure.value(), dec, pcFrame);
   }
 
   if (pcFrame->frameFormat == VVDEC_FF_PROGRESSIVE)
